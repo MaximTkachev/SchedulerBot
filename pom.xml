@@ -32,6 +32,20 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.telegram</groupId>
+            <artifactId>telegrambots</artifactId>
+            <version>6.1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-resolver-dns-native-macos</artifactId>
+            <scope>runtime</scope>
+            <classifier>osx-aarch_64</classifier>
+            <version>4.1.84.Final</version>
+        </dependency>
     </dependencies>
 
     <build>
