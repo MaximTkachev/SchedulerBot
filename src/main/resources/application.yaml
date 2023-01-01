@@ -1,0 +1,5 @@
+bot:
+  username: # put your username here
+  token: # put your token here
+server:
+  port: 8080
