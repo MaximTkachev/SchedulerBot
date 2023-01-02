@@ -1,6 +1,7 @@
 package ru.qwerty.schedulerbot.handler;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.qwerty.schedulerbot.handler.implement.DefaultHandler;
 import ru.qwerty.schedulerbot.handler.implement.ErrorHandler;
@@ -16,6 +17,7 @@ import ru.qwerty.schedulerbot.handler.implement.UnsubscribeHandler;
  * This component is used to create a user command handler.
  */
 @Slf4j
+@Component
 public class HandlerFactory {
 
     public Handler create(Update update) {
