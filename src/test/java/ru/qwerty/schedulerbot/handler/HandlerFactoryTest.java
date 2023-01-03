@@ -5,9 +5,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.qwerty.schedulerbot.converter.UserConverter;
 import ru.qwerty.schedulerbot.handler.implement.DefaultHandler;
 import ru.qwerty.schedulerbot.handler.implement.ErrorHandler;
 import ru.qwerty.schedulerbot.handler.implement.GetCurrentGroupHandler;
@@ -17,6 +19,7 @@ import ru.qwerty.schedulerbot.handler.implement.SetGroupHandler;
 import ru.qwerty.schedulerbot.handler.implement.StartHandler;
 import ru.qwerty.schedulerbot.handler.implement.SubscribeHandler;
 import ru.qwerty.schedulerbot.handler.implement.UnsubscribeHandler;
+import ru.qwerty.schedulerbot.service.UserService;
 
 import java.util.stream.Stream;
 
@@ -25,11 +28,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(MockitoExtension.class)
 class HandlerFactoryTest {
 
+    @Mock
+    private UserConverter userConverter;
+
+    @Mock
+    private UserService userService;
+
     private HandlerFactory factory;
 
     @BeforeEach
     void setUp() {
-        factory = new HandlerFactory();
+        factory = new HandlerFactory(userConverter, userService);
     }
 
     private static Stream<Arguments> provideArgumentsForTestCreateWithGetCurrentGroupCommand() {
