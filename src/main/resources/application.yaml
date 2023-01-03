@@ -1,5 +1,14 @@
 bot:
   username: # put your username here
   token: # put your token here
+spring:
+  datasource:
+    url: jdbc:postgresql://db:5432/hitsbot
+    username: hitsbot
+    password: hitsbot
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
 server:
   port: 8080
