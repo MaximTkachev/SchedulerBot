@@ -1,7 +1,10 @@
-package ru.qwerty.schedulerbot.handler;
+package ru.qwerty.schedulerbot.model;
 
 import lombok.Getter;
 
+/**
+ * The enum contains a list of user commands.
+ */
 public enum Command {
 
     GET_CURRENT_GROUP("/get-group"),
@@ -17,6 +20,11 @@ public enum Command {
 
     Command(String value){
         this.value = value;
+    }
+
+    @Override
+    public String toString() {
+        return this.value;
     }
 
     public static Command fromString(String value) {
