@@ -1,8 +1,10 @@
 package ru.qwerty.schedulerbot.handler;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.qwerty.schedulerbot.converter.UserConverter;
 import ru.qwerty.schedulerbot.handler.implement.DefaultHandler;
 import ru.qwerty.schedulerbot.handler.implement.ErrorHandler;
 import ru.qwerty.schedulerbot.handler.implement.GetCurrentGroupHandler;
@@ -12,13 +14,20 @@ import ru.qwerty.schedulerbot.handler.implement.SetGroupHandler;
 import ru.qwerty.schedulerbot.handler.implement.StartHandler;
 import ru.qwerty.schedulerbot.handler.implement.SubscribeHandler;
 import ru.qwerty.schedulerbot.handler.implement.UnsubscribeHandler;
+import ru.qwerty.schedulerbot.model.Command;
+import ru.qwerty.schedulerbot.service.UserService;
 
 /**
  * This component is used to create a user command handler.
  */
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class HandlerFactory {
+
+    private final UserConverter userConverter;
+
+    private final UserService userService;
 
     public Handler create(Update update) {
         if (!(update.hasMessage() && update.getMessage().hasText())) {
@@ -47,7 +56,7 @@ public class HandlerFactory {
             case SET_GROUP:
                 return new SetGroupHandler();
             case START:
-                return new StartHandler();
+                return new StartHandler(userConverter, userService);
             case SUBSCRIBE:
                 return new SubscribeHandler();
             case UNSUBSCRIBE:
