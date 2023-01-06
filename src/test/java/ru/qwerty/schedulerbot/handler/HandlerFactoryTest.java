@@ -19,6 +19,7 @@ import ru.qwerty.schedulerbot.handler.implement.SetGroupHandler;
 import ru.qwerty.schedulerbot.handler.implement.StartHandler;
 import ru.qwerty.schedulerbot.handler.implement.SubscribeHandler;
 import ru.qwerty.schedulerbot.handler.implement.UnsubscribeHandler;
+import ru.qwerty.schedulerbot.service.GroupService;
 import ru.qwerty.schedulerbot.service.UserService;
 
 import java.util.stream.Stream;
@@ -34,11 +35,14 @@ class HandlerFactoryTest {
     @Mock
     private UserService userService;
 
+    @Mock
+    private GroupService groupService;
+
     private HandlerFactory factory;
 
     @BeforeEach
     void setUp() {
-        factory = new HandlerFactory(userConverter, userService);
+        factory = new HandlerFactory(userConverter, userService, groupService);
     }
 
     private static Stream<Arguments> provideArgumentsForTestCreateWithGetCurrentGroupCommand() {

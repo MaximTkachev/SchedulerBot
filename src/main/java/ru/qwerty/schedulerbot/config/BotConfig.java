@@ -16,4 +16,7 @@ public class BotConfig {
 
     @Value("${bot.token}")
     private String token;
+
+    @Value("${bot.request-timeout-millis}")
+    private long requestTimeoutMillis;
 }

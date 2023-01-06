@@ -7,7 +7,17 @@ import lombok.Getter;
  */
 public enum Response {
 
-    USER_WAS_ALREADY_REGISTERED("Вы уже зарегистрированы");
+    USER_WAS_ALREADY_REGISTERED("Вы уже зарегистрированы"),
+
+    GROUP_NUMBER_NOT_SPECIFIED("Не задан номер группы"),
+
+    INVALID_GROUP_NUMBER("Некорректный номер группы"),
+
+    FACULTY_IS_NOT_SUPPORTED("Некорректный номер группы или факультет не поддерживается"),
+
+    GROUP_NOT_FOUND("Группа не найдена"),
+
+    USER_NOT_FOUND("Не можем найти вас в БД");
 
     @Getter
     private final String message;

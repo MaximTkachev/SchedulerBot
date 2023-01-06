@@ -37,7 +37,7 @@ public class DefaultMessageSender extends DefaultAbsSender implements MessageSen
             execute(sendMessage);
             log.info("Message: {} was successfully sent to chat: {}", prepareMessageForLog(message), chatId);
         } catch (Exception e) {
-            log.error("Filed to send message ", e);
+            log.error("Failed to send message ", e);
         }
     }
 
