@@ -15,6 +15,7 @@ import ru.qwerty.schedulerbot.handler.implement.StartHandler;
 import ru.qwerty.schedulerbot.handler.implement.SubscribeHandler;
 import ru.qwerty.schedulerbot.handler.implement.UnsubscribeHandler;
 import ru.qwerty.schedulerbot.model.Command;
+import ru.qwerty.schedulerbot.service.GroupService;
 import ru.qwerty.schedulerbot.service.UserService;
 
 /**
@@ -28,6 +29,8 @@ public class HandlerFactory {
     private final UserConverter userConverter;
 
     private final UserService userService;
+
+    private final GroupService groupService;
 
     public Handler create(Update update) {
         if (!(update.hasMessage() && update.getMessage().hasText())) {
@@ -54,7 +57,7 @@ public class HandlerFactory {
             case GET_SCHEDULE:
                 return new GetScheduleHandler();
             case SET_GROUP:
-                return new SetGroupHandler();
+                return new SetGroupHandler(groupService, userService);
             case START:
                 return new StartHandler(userConverter, userService);
             case SUBSCRIBE:

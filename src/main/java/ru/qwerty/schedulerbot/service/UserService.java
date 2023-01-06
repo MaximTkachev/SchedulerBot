@@ -8,4 +8,6 @@ import ru.qwerty.schedulerbot.entity.UserEntity;
 public interface UserService {
 
     void save(UserEntity user);
+
+    void update(UserEntity newData, long id);
 }
