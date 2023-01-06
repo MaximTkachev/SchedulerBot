@@ -51,7 +51,7 @@ public class HandlerFactory {
 
         switch (command) {
             case GET_CURRENT_GROUP:
-                return new GetCurrentGroupHandler();
+                return new GetCurrentGroupHandler(userService);
             case GET_MENU:
                 return new GetMenuHandler();
             case GET_SCHEDULE:
