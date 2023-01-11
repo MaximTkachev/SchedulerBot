@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.qwerty.schedulerbot.api.RequestManager;
 import ru.qwerty.schedulerbot.converter.UserConverter;
 import ru.qwerty.schedulerbot.handler.implement.DefaultHandler;
 import ru.qwerty.schedulerbot.handler.implement.ErrorHandler;
@@ -22,6 +23,7 @@ import ru.qwerty.schedulerbot.handler.implement.UnsubscribeHandler;
 import ru.qwerty.schedulerbot.service.GroupService;
 import ru.qwerty.schedulerbot.service.UserService;
 
+import java.time.Clock;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -38,11 +40,17 @@ class HandlerFactoryTest {
     @Mock
     private GroupService groupService;
 
+    @Mock
+    private RequestManager requestManager;
+
+    @Mock
+    private Clock clock;
+
     private HandlerFactory factory;
 
     @BeforeEach
     void setUp() {
-        factory = new HandlerFactory(userConverter, userService, groupService);
+        factory = new HandlerFactory(userConverter, userService, groupService, requestManager, clock);
     }
 
     private static Stream<Arguments> provideArgumentsForTestCreateWithGetCurrentGroupCommand() {

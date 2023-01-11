@@ -7,5 +7,6 @@ public enum LessonType {
     LABORATORY,
     DIFFERENTIAL_CREDIT,
     CONSULTATION,
-    EXAM
+    EXAM,
+    CREDIT
 }
