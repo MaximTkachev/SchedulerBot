@@ -2,6 +2,8 @@ bot:
   username: # put your username here
   token: # put your token here
   request-timeout-millis: 600000
+system:
+  max-thread-number: 4
 spring:
   datasource:
     url: jdbc:postgresql://db:5432/hitsbot
