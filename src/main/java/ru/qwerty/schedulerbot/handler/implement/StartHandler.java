@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.qwerty.schedulerbot.converter.UserConverter;
 import ru.qwerty.schedulerbot.entity.UserEntity;
-import ru.qwerty.schedulerbot.exception.InternalException;
 import ru.qwerty.schedulerbot.mapper.UpdateMapper;
 import ru.qwerty.schedulerbot.model.Command;
 import ru.qwerty.schedulerbot.handler.Handler;
@@ -24,17 +23,9 @@ public class StartHandler implements Handler {
 
     @Override
     public String handle(Update update) {
-        try {
-            UserEntity user = converter.convertToEntity(update);
-            service.save(user);
-            log.info("User was registered from update; {}", UpdateMapper.mapForLog(update));
-            return "Добро пожаловать!\nВведите " + Command.GET_MENU + " чтобы получить список доступных команд";
-        } catch (InternalException e) {
-            log.warn("Failed to register user from update: {}", UpdateMapper.mapForLog(update), e);
-            return e.getMessage();
-        } catch (Exception e) {
-            log.error("Failed to register user from update: {}", UpdateMapper.mapForLog(update), e);
-            return "Произошла непредвиденная ошибка на сервере";
-        }
+        UserEntity user = converter.convertToEntity(update);
+        service.save(user);
+        log.info("User was registered from update; {}", UpdateMapper.mapForLog(update));
+        return "Добро пожаловать!\nВведите " + Command.GET_MENU + " чтобы получить список доступных команд";
     }
 }
