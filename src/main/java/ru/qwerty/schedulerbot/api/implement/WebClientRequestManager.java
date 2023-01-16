@@ -46,14 +46,7 @@ public class WebClientRequestManager implements RequestManager {
         }
         lastRequestForGroupsMillis = clock.millis();
         
-        String response = WebClient.create()
-                .get()
-                .uri(GET_GROUPS_URL)
-                .retrieve()
-                .bodyToMono(String.class)
-                .log()
-                .block();
-
+        String response = sendGetRequest(GET_GROUPS_URL);
         try {
             List<Group> groups = Mapper.deserializeGroups(response);
             log.info("Groups were successfully received from server: {}", response);
@@ -67,13 +60,7 @@ public class WebClientRequestManager implements RequestManager {
     @Override
     public DaySchedule fetchSchedule(String groupId, Date date) throws JsonProcessingException {
         String dateString = convertDateToString(date);
-        String response = WebClient.create()
-                .get()
-                .uri(String.format(GET_SCHEDULE_URL_TEMPLATE, groupId, dateString, dateString))
-                .retrieve()
-                .bodyToMono(String.class)
-                .log()
-                .block();
+        String response = sendGetRequest(String.format(GET_SCHEDULE_URL_TEMPLATE, groupId, dateString, dateString));
 
         try {
             DaySchedule schedule = Mapper.deserializeDaySchedules(response).get(0);
@@ -88,5 +75,15 @@ public class WebClientRequestManager implements RequestManager {
     private String convertDateToString(Date date) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         return simpleDateFormat.format(date);
+    }
+
+    private static String sendGetRequest(String uri) {
+        return WebClient.create()
+                .get()
+                .uri(uri)
+                .retrieve()
+                .bodyToMono(String.class)
+                .log()
+                .block();
     }
 }
