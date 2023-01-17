@@ -8,7 +8,6 @@ import ru.qwerty.schedulerbot.handler.Handler;
 import ru.qwerty.schedulerbot.model.UserChanges;
 import ru.qwerty.schedulerbot.service.GroupService;
 import ru.qwerty.schedulerbot.service.UserService;
-import ru.qwerty.schedulerbot.util.Validator;
 
 /**
  * The handler is used for the case when a user wants to set his default group.
@@ -24,7 +23,6 @@ public class SetGroupHandler implements Handler {
     @Override
     public String handle(Update update) {
         String groupNumber = getGroupFromMessage(update.getMessage().getText());
-        Validator.checkGroupNumber(groupNumber);
         GroupEntity group = groupService.getByNumber(groupNumber);
 
         UserChanges userChanges = new UserChanges();
