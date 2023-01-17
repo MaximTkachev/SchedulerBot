@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.qwerty.schedulerbot.api.RequestManager;
 import ru.qwerty.schedulerbot.converter.UserConverter;
 import ru.qwerty.schedulerbot.handler.implement.DefaultHandler;
 import ru.qwerty.schedulerbot.handler.implement.ErrorHandler;
@@ -17,6 +16,7 @@ import ru.qwerty.schedulerbot.handler.implement.SubscribeHandler;
 import ru.qwerty.schedulerbot.handler.implement.UnsubscribeHandler;
 import ru.qwerty.schedulerbot.model.Command;
 import ru.qwerty.schedulerbot.service.GroupService;
+import ru.qwerty.schedulerbot.service.ScheduleService;
 import ru.qwerty.schedulerbot.service.UserService;
 
 import java.time.Clock;
@@ -35,7 +35,7 @@ public class HandlerFactory {
 
     private final GroupService groupService;
 
-    private final RequestManager requestManager;
+    private final ScheduleService scheduleService;
 
     private final Clock clock;
 
@@ -62,13 +62,13 @@ public class HandlerFactory {
             case GET_MENU:
                 return new GetMenuHandler();
             case GET_SCHEDULE:
-                return new GetScheduleHandler(userService, requestManager, clock);
+                return new GetScheduleHandler(userService, scheduleService, clock);
             case SET_GROUP:
                 return new SetGroupHandler(groupService, userService);
             case START:
                 return new StartHandler(userConverter, userService);
             case SUBSCRIBE:
-                return new SubscribeHandler();
+                return new SubscribeHandler(userService);
             case UNSUBSCRIBE:
                 return new UnsubscribeHandler();
             default:
