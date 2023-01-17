@@ -23,6 +23,7 @@ public class DefaultUserConverter implements UserConverter {
         UserEntity user = new UserEntity();
         user.setId(update.getMessage().getChat().getId());
         user.setCreationDate(new Date(clock.millis()));
+        user.setIsSubscribed(false);
 
         return user;
     }

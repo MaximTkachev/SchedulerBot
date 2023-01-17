@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.qwerty.schedulerbot.entity.GroupEntity;
-import ru.qwerty.schedulerbot.entity.UserEntity;
 import ru.qwerty.schedulerbot.handler.Handler;
+import ru.qwerty.schedulerbot.model.UserChanges;
 import ru.qwerty.schedulerbot.service.GroupService;
 import ru.qwerty.schedulerbot.service.UserService;
 import ru.qwerty.schedulerbot.util.Validator;
@@ -27,11 +27,11 @@ public class SetGroupHandler implements Handler {
         Validator.checkGroupNumber(groupNumber);
         GroupEntity group = groupService.getByNumber(groupNumber);
 
-        UserEntity userChanges = new UserEntity();
+        UserChanges userChanges = new UserChanges();
         userChanges.setGroup(group);
-        userService.update(userChanges, update.getMessage().getChat().getId());
+        userService.update(update.getMessage().getChat().getId(), userChanges);
 
-        return "Группа по умолчанию успешно изменена!";
+        return "Группа по умолчанию успешно изменена";
     }
 
     private static String getGroupFromMessage(String message) {

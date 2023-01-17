@@ -68,7 +68,7 @@ public class HandlerFactory {
             case START:
                 return new StartHandler(userConverter, userService);
             case SUBSCRIBE:
-                return new SubscribeHandler();
+                return new SubscribeHandler(userService);
             case UNSUBSCRIBE:
                 return new UnsubscribeHandler();
             default:

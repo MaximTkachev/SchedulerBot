@@ -34,4 +34,6 @@ public class UserEntity {
     @ManyToOne
     @JoinColumn(name = "group_id", referencedColumnName = "id")
     private GroupEntity group;
+
+    private Boolean isSubscribed;
 }

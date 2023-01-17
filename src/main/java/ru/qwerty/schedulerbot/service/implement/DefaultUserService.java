@@ -7,6 +7,7 @@ import ru.qwerty.schedulerbot.entity.UserEntity;
 import ru.qwerty.schedulerbot.exception.DuplicateDataException;
 import ru.qwerty.schedulerbot.exception.ObjectNotFoundException;
 import ru.qwerty.schedulerbot.model.Response;
+import ru.qwerty.schedulerbot.model.UserChanges;
 import ru.qwerty.schedulerbot.repository.UserRepository;
 import ru.qwerty.schedulerbot.service.UserService;
 
@@ -37,11 +38,14 @@ public class DefaultUserService implements UserService {
 
     @Override
     @Transactional
-    public void update(UserEntity newData, long id) {
+    public void update(long id, UserChanges userChanges) {
         UserEntity user = getById(id);
 
-        if (newData.getGroup() != null) {
-            user.setGroup(newData.getGroup());
+        if (userChanges.getGroup() != null) {
+            user.setGroup(userChanges.getGroup());
+        }
+        if (userChanges.getIsSubscribed() != null) {
+            user.setIsSubscribed(userChanges.getIsSubscribed());
         }
     }
 }
