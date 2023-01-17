@@ -11,13 +11,14 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.qwerty.schedulerbot.exception.InternalException;
 import ru.qwerty.schedulerbot.service.GroupService;
 import ru.qwerty.schedulerbot.service.UserService;
 import ru.qwerty.schedulerbot.util.Utils;
 
 import java.util.stream.Stream;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @ExtendWith(MockitoExtension.class)
 class SetGroupHandlerTest {
@@ -51,7 +52,9 @@ class SetGroupHandlerTest {
     @MethodSource("provideArgumentsForTestHandleWithoutGroupNumber")
     void testHandleWithoutGroupNumber(String userMessage) {
         Update update = Utils.createUpdateWithText(userMessage);
-        assertThat(handler.handle(update)).isEqualTo("Не задан номер группы");
+        assertThatThrownBy(() -> handler.handle(update))
+                .isInstanceOf(InternalException.class)
+                .hasMessage("Не задан номер группы");
     }
 
     private static Stream<Arguments> provideArgumentsForTestHandleWithInvalidGroupNumber() {
@@ -62,7 +65,9 @@ class SetGroupHandlerTest {
     @MethodSource("provideArgumentsForTestHandleWithInvalidGroupNumber")
     void testHandleWithInvalidGroupNumber(String userMessage) {
         Update update = Utils.createUpdateWithText(userMessage);
-        assertThat(handler.handle(update)).isEqualTo("Некорректный номер группы");
+        assertThatThrownBy(() -> handler.handle(update))
+                .isInstanceOf(InternalException.class)
+                .hasMessage("Некорректный номер группы");
     }
 
     private static Stream<Arguments> provideArgumentsForTestHandleWithInvalidFaculty() {
@@ -73,7 +78,9 @@ class SetGroupHandlerTest {
     @MethodSource("provideArgumentsForTestHandleWithInvalidFaculty")
     void testHandleWithInvalidFaculty(String userMessage) {
         Update update = Utils.createUpdateWithText(userMessage);
-        assertThat(handler.handle(update)).isEqualTo("Некорректный номер группы или факультет не поддерживается");
+        assertThatThrownBy(() -> handler.handle(update))
+                .isInstanceOf(InternalException.class)
+                .hasMessage("Некорректный номер группы или факультет не поддерживается");
     }
 
     @AfterEach

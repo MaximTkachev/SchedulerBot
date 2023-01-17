@@ -20,8 +20,10 @@ import ru.qwerty.schedulerbot.handler.implement.StartHandler;
 import ru.qwerty.schedulerbot.handler.implement.SubscribeHandler;
 import ru.qwerty.schedulerbot.handler.implement.UnsubscribeHandler;
 import ru.qwerty.schedulerbot.service.GroupService;
+import ru.qwerty.schedulerbot.service.ScheduleService;
 import ru.qwerty.schedulerbot.service.UserService;
 
+import java.time.Clock;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -38,11 +40,17 @@ class HandlerFactoryTest {
     @Mock
     private GroupService groupService;
 
+    @Mock
+    private ScheduleService scheduleService;
+
+    @Mock
+    private Clock clock;
+
     private HandlerFactory factory;
 
     @BeforeEach
     void setUp() {
-        factory = new HandlerFactory(userConverter, userService, groupService);
+        factory = new HandlerFactory(userConverter, userService, groupService, scheduleService, clock);
     }
 
     private static Stream<Arguments> provideArgumentsForTestCreateWithGetCurrentGroupCommand() {

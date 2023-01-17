@@ -16,7 +16,10 @@ import ru.qwerty.schedulerbot.handler.implement.SubscribeHandler;
 import ru.qwerty.schedulerbot.handler.implement.UnsubscribeHandler;
 import ru.qwerty.schedulerbot.model.Command;
 import ru.qwerty.schedulerbot.service.GroupService;
+import ru.qwerty.schedulerbot.service.ScheduleService;
 import ru.qwerty.schedulerbot.service.UserService;
+
+import java.time.Clock;
 
 /**
  * This component is used to create a user command handler.
@@ -31,6 +34,10 @@ public class HandlerFactory {
     private final UserService userService;
 
     private final GroupService groupService;
+
+    private final ScheduleService scheduleService;
+
+    private final Clock clock;
 
     public Handler create(Update update) {
         if (!(update.hasMessage() && update.getMessage().hasText())) {
@@ -55,7 +62,7 @@ public class HandlerFactory {
             case GET_MENU:
                 return new GetMenuHandler();
             case GET_SCHEDULE:
-                return new GetScheduleHandler();
+                return new GetScheduleHandler(userService, scheduleService, clock);
             case SET_GROUP:
                 return new SetGroupHandler(groupService, userService);
             case START:
