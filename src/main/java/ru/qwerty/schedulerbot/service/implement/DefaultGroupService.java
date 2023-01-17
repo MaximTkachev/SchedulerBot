@@ -13,6 +13,7 @@ import ru.qwerty.schedulerbot.model.Response;
 import ru.qwerty.schedulerbot.model.dto.Group;
 import ru.qwerty.schedulerbot.repository.GroupRepository;
 import ru.qwerty.schedulerbot.service.GroupService;
+import ru.qwerty.schedulerbot.util.Validator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +43,7 @@ public class DefaultGroupService implements GroupService {
     @Override
     @Transactional
     public GroupEntity getByNumber(String number) {
+        Validator.checkGroupNumber(number);
         Optional<GroupEntity> groupEntity = repository.findByNumber(number);
         if (groupEntity.isPresent()) {
             return groupEntity.get();
