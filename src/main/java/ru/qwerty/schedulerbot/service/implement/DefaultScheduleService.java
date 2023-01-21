@@ -6,7 +6,7 @@ import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 import ru.qwerty.schedulerbot.api.RequestManager;
 import ru.qwerty.schedulerbot.entity.redis.ScheduleKey;
-import ru.qwerty.schedulerbot.exception.StrangeServerDataException;
+import ru.qwerty.schedulerbot.exception.UnexpectedServerDataException;
 import ru.qwerty.schedulerbot.mapper.Mapper;
 import ru.qwerty.schedulerbot.model.RedisCache;
 import ru.qwerty.schedulerbot.model.dto.DaySchedule;
@@ -49,7 +49,7 @@ public class DefaultScheduleService implements ScheduleService {
         try {
             return requestManager.fetchSchedule(groupId, date);
         } catch (JsonProcessingException e) {
-            throw new StrangeServerDataException();
+            throw new UnexpectedServerDataException();
         }
     }
 }

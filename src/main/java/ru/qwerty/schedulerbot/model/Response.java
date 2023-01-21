@@ -19,7 +19,7 @@ public enum Response {
 
     USER_NOT_FOUND("Не можем найти вас в БД"),
 
-    STRANGE_SERVER_DATA("Мы получили странные данные от сервера и не можем обработать их в данный момент");
+    UNEXPECTED_SERVER_DATA("Мы получили странные данные от сервера и не можем обработать их в данный момент");
 
     @Getter
     private final String message;
