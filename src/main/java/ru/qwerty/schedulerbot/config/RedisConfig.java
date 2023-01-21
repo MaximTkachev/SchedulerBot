@@ -18,14 +18,11 @@ import java.time.Duration;
 @EnableRedisRepositories
 public class RedisConfig {
 
-    @Value("${redis.host}")
-    private String hostName;
-
-    @Value("${redis.port}")
-    private int port;
-
     @Bean
-    public JedisConnectionFactory jedisConnectionFactory() {
+    public JedisConnectionFactory jedisConnectionFactory(
+            @Value("${redis.host}") String hostName,
+            @Value("${redis.port}") int port
+    ) {
         RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration();
         configuration.setHostName(hostName);
         configuration.setPort(port);

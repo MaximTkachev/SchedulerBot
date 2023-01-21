@@ -13,11 +13,11 @@ import ru.qwerty.schedulerbot.telegram.MessageSender;
  */
 @Slf4j
 @Component
-public class DefaultMessageSender extends DefaultAbsSender implements MessageSender {
+public class TelegramMessageSender extends DefaultAbsSender implements MessageSender {
 
     private final BotConfig config;
 
-    public DefaultMessageSender(BotConfig config) {
+    public TelegramMessageSender(BotConfig config) {
         super(new DefaultBotOptions());
         this.config = config;
     }

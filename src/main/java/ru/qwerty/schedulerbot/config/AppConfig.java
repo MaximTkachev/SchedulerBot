@@ -14,16 +14,13 @@ import java.util.concurrent.ThreadPoolExecutor;
 @Configuration
 public class AppConfig {
 
-    @Value("${system.max-thread-number}")
-    private int maxThreadNumber;
-
     @Bean
     public Clock clock() {
         return Clock.systemDefaultZone();
     }
 
     @Bean
-    public ThreadPoolExecutor threadPoolExecutor() {
+    public ThreadPoolExecutor threadPoolExecutor(@Value("${system.max-thread-number}") int maxThreadNumber) {
         return (ThreadPoolExecutor) Executors.newFixedThreadPool(maxThreadNumber);
     }
 }
