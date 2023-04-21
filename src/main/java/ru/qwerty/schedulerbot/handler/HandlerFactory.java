@@ -4,7 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.qwerty.schedulerbot.converter.UserConverter;
+import ru.qwerty.schedulerbot.core.service.GroupService;
+import ru.qwerty.schedulerbot.core.service.ScheduleService;
+import ru.qwerty.schedulerbot.core.service.UserService;
+import ru.qwerty.schedulerbot.data.converter.UserConverter;
+import ru.qwerty.schedulerbot.data.model.Command;
 import ru.qwerty.schedulerbot.handler.implement.DefaultHandler;
 import ru.qwerty.schedulerbot.handler.implement.ErrorHandler;
 import ru.qwerty.schedulerbot.handler.implement.GetCurrentGroupHandler;
@@ -14,10 +18,6 @@ import ru.qwerty.schedulerbot.handler.implement.SetGroupHandler;
 import ru.qwerty.schedulerbot.handler.implement.StartHandler;
 import ru.qwerty.schedulerbot.handler.implement.SubscribeHandler;
 import ru.qwerty.schedulerbot.handler.implement.UnsubscribeHandler;
-import ru.qwerty.schedulerbot.model.Command;
-import ru.qwerty.schedulerbot.service.GroupService;
-import ru.qwerty.schedulerbot.service.ScheduleService;
-import ru.qwerty.schedulerbot.service.UserService;
 
 import java.time.Clock;
 
@@ -70,7 +70,7 @@ public class HandlerFactory {
             case SUBSCRIBE:
                 return new SubscribeHandler(userService);
             case UNSUBSCRIBE:
-                return new UnsubscribeHandler();
+                return new UnsubscribeHandler(userService);
             default:
                 log.error("Failed to create handler from user message: {}. Command: {}", message, command);
                 return new DefaultHandler();

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.DefaultAbsSender;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import ru.qwerty.schedulerbot.config.BotConfig;
+import ru.qwerty.schedulerbot.config.BotProperties;
 import ru.qwerty.schedulerbot.telegram.MessageSender;
 
 /**
@@ -15,9 +15,9 @@ import ru.qwerty.schedulerbot.telegram.MessageSender;
 @Component
 public class TelegramMessageSender extends DefaultAbsSender implements MessageSender {
 
-    private final BotConfig config;
+    private final BotProperties config;
 
-    public TelegramMessageSender(BotConfig config) {
+    public TelegramMessageSender(BotProperties config) {
         super(new DefaultBotOptions());
         this.config = config;
     }
@@ -29,12 +29,8 @@ public class TelegramMessageSender extends DefaultAbsSender implements MessageSe
 
     @Override
     public void send(long chatId, String message) {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(chatId);
-        sendMessage.setText(message);
-
         try {
-            execute(sendMessage);
+            execute(new SendMessage(Long.toString(chatId), message));
             log.info("Message: {} was successfully sent to chat: {}", prepareMessageForLog(message), chatId);
         } catch (Exception e) {
             log.error("Failed to send message ", e);
@@ -42,6 +38,6 @@ public class TelegramMessageSender extends DefaultAbsSender implements MessageSe
     }
 
     private static String prepareMessageForLog(String message) {
-        return message.replaceAll("\n", "");
+        return message.replace("\n", "");
     }
 }

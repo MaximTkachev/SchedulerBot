@@ -1,1 +1,5 @@
-# ShedulerBot
+# SchedulerBot
+
+```shell
+mvn clean install
+```

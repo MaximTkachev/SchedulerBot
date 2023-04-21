@@ -3,11 +3,11 @@ package ru.qwerty.schedulerbot.handler.implement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.qwerty.schedulerbot.entity.GroupEntity;
+import ru.qwerty.schedulerbot.core.service.GroupService;
+import ru.qwerty.schedulerbot.core.service.UserService;
+import ru.qwerty.schedulerbot.data.entity.GroupEntity;
+import ru.qwerty.schedulerbot.data.model.UserChanges;
 import ru.qwerty.schedulerbot.handler.Handler;
-import ru.qwerty.schedulerbot.model.UserChanges;
-import ru.qwerty.schedulerbot.service.GroupService;
-import ru.qwerty.schedulerbot.service.UserService;
 
 /**
  * The handler is used for the case when a user wants to set his default group.

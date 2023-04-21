@@ -1,6 +1,6 @@
 package ru.qwerty.schedulerbot.exception;
 
-import ru.qwerty.schedulerbot.model.Response;
+import ru.qwerty.schedulerbot.data.model.Response;
 
 public class InvalidArgumentException extends InternalException {
 
