@@ -2,10 +2,11 @@ package ru.qwerty.schedulerbot.handler.implement;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.qwerty.schedulerbot.core.service.UserService;
 import ru.qwerty.schedulerbot.data.entity.GroupEntity;
 import ru.qwerty.schedulerbot.data.entity.UserEntity;
+import ru.qwerty.schedulerbot.data.model.Command;
+import ru.qwerty.schedulerbot.data.model.Message;
 import ru.qwerty.schedulerbot.handler.Handler;
 
 /**
@@ -15,17 +16,20 @@ import ru.qwerty.schedulerbot.handler.Handler;
 @RequiredArgsConstructor
 public class GetCurrentGroupHandler implements Handler {
 
-    private static final String BASIC_MESSAGE = "Ваша группа по умолчанию: ";
+    private static final String GROUP_NOT_SET_MESSAGE
+            = "Вы не задали свой номер группы.\nСделайте это, используя команду " + Command.SET_GROUP;
+
+    private static final String SUCCESSFUL_RESULT_MESSAGE = "Ваша группа по умолчанию: ";
 
     private final UserService userService;
 
     @Override
-    public String handle(Update update) {
-        UserEntity userEntity = userService.getById(update.getMessage().getChat().getId());
+    public String handle(Message message) {
+        UserEntity userEntity = userService.getById(message.getId());
         GroupEntity group = userEntity.getGroup();
         if (group == null) {
-            return "Вы пока не задали группу по умолчанию";
+            return GROUP_NOT_SET_MESSAGE;
         }
-        return BASIC_MESSAGE + group.getNumber();
+        return SUCCESSFUL_RESULT_MESSAGE + group.getNumber();
     }
 }

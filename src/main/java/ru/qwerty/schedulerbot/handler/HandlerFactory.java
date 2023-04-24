@@ -3,14 +3,13 @@ package ru.qwerty.schedulerbot.handler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.qwerty.schedulerbot.core.service.GroupService;
 import ru.qwerty.schedulerbot.core.service.ScheduleService;
 import ru.qwerty.schedulerbot.core.service.UserService;
 import ru.qwerty.schedulerbot.data.converter.UserConverter;
 import ru.qwerty.schedulerbot.data.model.Command;
-import ru.qwerty.schedulerbot.handler.implement.DefaultHandler;
-import ru.qwerty.schedulerbot.handler.implement.ErrorHandler;
+import ru.qwerty.schedulerbot.data.model.Message;
+import ru.qwerty.schedulerbot.handler.implement.UnknownCommandHandler;
 import ru.qwerty.schedulerbot.handler.implement.GetCurrentGroupHandler;
 import ru.qwerty.schedulerbot.handler.implement.GetMenuHandler;
 import ru.qwerty.schedulerbot.handler.implement.GetScheduleHandler;
@@ -39,21 +38,15 @@ public class HandlerFactory {
 
     private final Clock clock;
 
-    public Handler create(Update update) {
-        if (!(update.hasMessage() && update.getMessage().hasText())) {
-            return new ErrorHandler();
-        }
-        String message = update.getMessage().getText();
-
-        if (message.startsWith(" ")) {
-            log.warn("Failed to process user message: {}", message);
-            return new DefaultHandler();
+    public Handler create(Message message) {
+        if (message.getText() == null || message.getText().isEmpty()) {
+            return new UnknownCommandHandler();
         }
 
-        Command command = Command.fromString(message.split(" ")[0]);
+        Command command = Command.fromString(message.getText().split(" ")[0]);
         if (command == null) {
             log.warn("Failed to get command from user message: {}", message);
-            return new DefaultHandler();
+            return new UnknownCommandHandler();
         }
 
         switch (command) {
@@ -73,7 +66,7 @@ public class HandlerFactory {
                 return new UnsubscribeHandler(userService);
             default:
                 log.error("Failed to create handler from user message: {}. Command: {}", message, command);
-                return new DefaultHandler();
+                return new UnknownCommandHandler();
         }
     }
 }

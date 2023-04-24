@@ -2,12 +2,13 @@ package ru.qwerty.schedulerbot.exception;
 
 import ru.qwerty.schedulerbot.data.model.Response;
 
-/**
- * The exception is the parent class for exceptions whose text can be returned to the user as a response.
- */
-public abstract class InternalException extends RuntimeException {
+public class InternalException extends ServiceException {
 
-    protected InternalException(Response response) {
-        super(response.getMessage());
+    public InternalException() {
+        super(Response.INTERNAL_SERVER_ERROR);
+    }
+
+    public InternalException(Response response) {
+        super(response);
     }
 }

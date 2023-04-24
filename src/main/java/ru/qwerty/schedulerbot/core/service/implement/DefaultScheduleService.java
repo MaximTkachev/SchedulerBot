@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import ru.qwerty.schedulerbot.core.api.RequestManager;
 import ru.qwerty.schedulerbot.core.service.ScheduleService;
 import ru.qwerty.schedulerbot.core.util.Mapper;
-import ru.qwerty.schedulerbot.data.entity.redis.ScheduleKey;
-import ru.qwerty.schedulerbot.data.model.RedisCache;
+import ru.qwerty.schedulerbot.data.redis.ScheduleKey;
+import ru.qwerty.schedulerbot.data.redis.RedisCache;
 import ru.qwerty.schedulerbot.data.model.dto.DaySchedule;
 import ru.qwerty.schedulerbot.exception.UnexpectedServerDataException;
 

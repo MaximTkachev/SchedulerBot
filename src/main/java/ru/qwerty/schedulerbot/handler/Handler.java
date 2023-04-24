@@ -1,6 +1,6 @@
 package ru.qwerty.schedulerbot.handler;
 
-import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.qwerty.schedulerbot.data.model.Message;
 
 /**
  * The interface is used to handle user commands.
@@ -8,10 +8,10 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 public interface Handler {
 
     /**
-     * Handles the user's command.
+     * Handles a user's command.
      *
-     * @param update Data received from the user.
+     * @param message Data received from the user.
      * @return The text to be sent to the user.
      */
-    String handle(Update update);
+    String handle(Message message);
 }

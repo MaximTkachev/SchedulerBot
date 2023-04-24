@@ -1,8 +1,10 @@
 package ru.qwerty.schedulerbot.exception;
 
-public class ActionNotAllowedException extends RuntimeException {
+import ru.qwerty.schedulerbot.data.model.Response;
 
-    public ActionNotAllowedException(String message) {
-        super(message);
+public class ActionNotAllowedException extends ServiceException {
+
+    public ActionNotAllowedException(Response response) {
+        super(response);
     }
 }

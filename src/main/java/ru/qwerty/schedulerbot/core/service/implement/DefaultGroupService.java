@@ -13,6 +13,7 @@ import ru.qwerty.schedulerbot.data.entity.GroupEntity;
 import ru.qwerty.schedulerbot.data.model.Response;
 import ru.qwerty.schedulerbot.data.model.dto.Group;
 import ru.qwerty.schedulerbot.exception.ActionNotAllowedException;
+import ru.qwerty.schedulerbot.exception.InternalException;
 import ru.qwerty.schedulerbot.exception.ObjectNotFoundException;
 
 import java.util.ArrayList;
@@ -65,7 +66,7 @@ public class DefaultGroupService implements GroupService {
         } catch (ActionNotAllowedException e) {
             throw new ObjectNotFoundException(Response.GROUP_NOT_FOUND);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new InternalException();
         }
     }
 

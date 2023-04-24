@@ -1,4 +1,4 @@
-package ru.qwerty.schedulerbot.data.entity.redis;
+package ru.qwerty.schedulerbot.data.redis;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

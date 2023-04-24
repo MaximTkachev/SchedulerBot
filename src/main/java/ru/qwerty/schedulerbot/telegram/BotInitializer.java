@@ -7,6 +7,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
+import ru.qwerty.schedulerbot.exception.InternalException;
 
 /**
  * The component is used to initialize the bot in the telegram api.
@@ -26,7 +27,7 @@ class BotInitializer {
             log.info("Bot was successfully initialized");
         } catch (Exception e) {
             log.error("Bot initialization failed", e);
-            throw new RuntimeException(e);
+            throw new InternalException();
         }
     }
 }

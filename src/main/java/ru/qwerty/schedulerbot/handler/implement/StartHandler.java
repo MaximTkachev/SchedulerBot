@@ -2,12 +2,10 @@ package ru.qwerty.schedulerbot.handler.implement;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.qwerty.schedulerbot.core.service.UserService;
-import ru.qwerty.schedulerbot.core.util.Mapper;
 import ru.qwerty.schedulerbot.data.converter.UserConverter;
-import ru.qwerty.schedulerbot.data.entity.UserEntity;
 import ru.qwerty.schedulerbot.data.model.Command;
+import ru.qwerty.schedulerbot.data.model.Message;
 import ru.qwerty.schedulerbot.handler.Handler;
 
 /**
@@ -17,15 +15,17 @@ import ru.qwerty.schedulerbot.handler.Handler;
 @RequiredArgsConstructor
 public class StartHandler implements Handler {
 
+    private static final String SUCCESSFUL_RESULT_MESSAGE
+            = "Добро пожаловать!\nВведите " + Command.GET_MENU + " чтобы получить список доступных команд";
+
     private final UserConverter converter;
 
     private final UserService service;
 
     @Override
-    public String handle(Update update) {
-        UserEntity user = converter.convertToEntity(update);
-        service.save(user);
-        log.info("User was registered from update; {}", Mapper.mapForLog(update));
-        return "Добро пожаловать!\nВведите " + Command.GET_MENU + " чтобы получить список доступных команд";
+    public String handle(Message message) {
+        service.save(converter.convertToEntity(message));
+        log.info("User was registered from user message; {}", message);
+        return SUCCESSFUL_RESULT_MESSAGE;
     }
 }

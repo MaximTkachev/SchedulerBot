@@ -8,6 +8,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import ru.qwerty.schedulerbot.config.BotProperties;
 import ru.qwerty.schedulerbot.core.api.RequestManager;
 import ru.qwerty.schedulerbot.core.util.Mapper;
+import ru.qwerty.schedulerbot.data.model.Response;
 import ru.qwerty.schedulerbot.data.model.dto.DaySchedule;
 import ru.qwerty.schedulerbot.data.model.dto.Group;
 import ru.qwerty.schedulerbot.exception.ActionNotAllowedException;
@@ -47,7 +48,7 @@ public class WebClientRequestManager implements RequestManager {
     public List<Group> fetchGroups() throws JsonProcessingException {
         if (lastRequestForGroupsMillis + requestTimeoutMillis > clock.millis()) {
             log.warn("It's too early to send request for groups");
-            throw new ActionNotAllowedException("It's too early to send request");
+            throw new ActionNotAllowedException(Response.ACTION_NOT_ALLOWED);
         }
         lastRequestForGroupsMillis = clock.millis();
 

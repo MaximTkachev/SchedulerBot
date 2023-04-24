@@ -2,10 +2,10 @@ package ru.qwerty.schedulerbot.handler.implement;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.qwerty.schedulerbot.core.service.GroupService;
 import ru.qwerty.schedulerbot.core.service.UserService;
 import ru.qwerty.schedulerbot.data.entity.GroupEntity;
+import ru.qwerty.schedulerbot.data.model.Message;
 import ru.qwerty.schedulerbot.data.model.UserChanges;
 import ru.qwerty.schedulerbot.handler.Handler;
 
@@ -16,20 +16,22 @@ import ru.qwerty.schedulerbot.handler.Handler;
 @RequiredArgsConstructor
 public class SetGroupHandler implements Handler {
 
+    private static final String SUCCESSFUL_RESULT_MESSAGE = "Группа по умолчанию успешно изменена";
+
     private final GroupService groupService;
 
     private final UserService userService;
 
     @Override
-    public String handle(Update update) {
-        String groupNumber = getGroupFromMessage(update.getMessage().getText());
+    public String handle(Message message) {
+        String groupNumber = getGroupFromMessage(message.getText());
         GroupEntity group = groupService.getByNumber(groupNumber);
 
         UserChanges userChanges = new UserChanges();
         userChanges.setGroup(group);
-        userService.update(update.getMessage().getChat().getId(), userChanges);
 
-        return "Группа по умолчанию успешно изменена";
+        userService.update(message.getId(), userChanges);
+        return SUCCESSFUL_RESULT_MESSAGE;
     }
 
     private static String getGroupFromMessage(String message) {

@@ -1,4 +1,4 @@
-package ru.qwerty.schedulerbot.data.model;
+package ru.qwerty.schedulerbot.data.redis;
 
 import java.util.Set;
 
