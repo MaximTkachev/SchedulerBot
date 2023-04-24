@@ -11,6 +11,9 @@ services:
       - redis
     ports:
       - "8080:8080"
+    environment:
+      - BOT_USERNAME=${BOT_USERNAME}
+      - BOT_TOKEN=${BOT_TOKEN}
 
   db:
     image: 'postgres:13.1-alpine'

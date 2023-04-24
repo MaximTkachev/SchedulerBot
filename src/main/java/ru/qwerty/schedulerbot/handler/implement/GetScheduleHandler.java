@@ -2,12 +2,13 @@ package ru.qwerty.schedulerbot.handler.implement;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.qwerty.schedulerbot.entity.GroupEntity;
+import org.springframework.data.domain.PageRequest;
+import ru.qwerty.schedulerbot.core.service.ScheduleService;
+import ru.qwerty.schedulerbot.core.service.UserService;
+import ru.qwerty.schedulerbot.data.entity.GroupEntity;
+import ru.qwerty.schedulerbot.data.model.Command;
+import ru.qwerty.schedulerbot.data.model.Message;
 import ru.qwerty.schedulerbot.handler.Handler;
-import ru.qwerty.schedulerbot.model.Command;
-import ru.qwerty.schedulerbot.service.ScheduleService;
-import ru.qwerty.schedulerbot.service.UserService;
 
 import java.time.Clock;
 import java.util.Date;
@@ -19,6 +20,9 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class GetScheduleHandler implements Handler {
 
+    private static final String GROUP_NOT_SET_MESSAGE
+            = "Вы не задали свой номер группы.\nСделайте это, используя команду " + Command.SET_GROUP;
+
     private final UserService userService;
 
     private final ScheduleService scheduleService;
@@ -26,10 +30,10 @@ public class GetScheduleHandler implements Handler {
     private final Clock clock;
 
     @Override
-    public String handle(Update update) {
-        GroupEntity group = userService.getById(update.getMessage().getChat().getId()).getGroup();
+    public String handle(Message message) {
+        GroupEntity group = userService.getById(message.getId()).getGroup();
         if (group == null) {
-            return "Вы не задали свой номер группы.\nСделайте это, используя команду " + Command.SET_GROUP;
+            return GROUP_NOT_SET_MESSAGE;
         }
 
         return scheduleService.get(group.getId(), new Date(clock.millis()));

@@ -1,8 +1,8 @@
 package ru.qwerty.schedulerbot.exception;
 
-import ru.qwerty.schedulerbot.model.Response;
+import ru.qwerty.schedulerbot.data.model.Response;
 
-public class ObjectNotFoundException extends InternalException {
+public class ObjectNotFoundException extends ServiceException {
 
     public ObjectNotFoundException(Response response) {
         super(response);

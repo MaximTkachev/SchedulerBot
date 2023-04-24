@@ -1,15 +1,38 @@
 package ru.qwerty.schedulerbot.telegram;
 
-/**
- * The component is used to send messages to users.
- */
-public interface MessageSender {
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.bots.DefaultAbsSender;
+import org.telegram.telegrambots.bots.DefaultBotOptions;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import ru.qwerty.schedulerbot.config.BotProperties;
 
-    /**
-     * Sends a message to a chat.
-     *
-     * @param chatId  The identifier of the chat to which the message will be sent.
-     * @param message The message text.
-     */
-    void send(long chatId, String message);
+@Slf4j
+@Component
+class MessageSender extends DefaultAbsSender {
+
+    private final BotProperties config;
+
+    MessageSender(BotProperties config) {
+        super(new DefaultBotOptions());
+        this.config = config;
+    }
+
+    @Override
+    public String getBotToken() {
+        return config.getToken();
+    }
+
+    public void send(long chatId, String message) {
+        try {
+            execute(new SendMessage(Long.toString(chatId), message));
+            log.info("Message: {} was successfully sent to chat: {}", prepareMessageForLog(message), chatId);
+        } catch (Exception e) {
+            log.error("Failed to send message ", e);
+        }
+    }
+
+    private static String prepareMessageForLog(String message) {
+        return message.replace("\n", "");
+    }
 }

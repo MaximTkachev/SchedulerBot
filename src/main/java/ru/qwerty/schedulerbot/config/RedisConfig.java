@@ -10,7 +10,7 @@ import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.RedisSerializer;
-import ru.qwerty.schedulerbot.model.RedisCache;
+import ru.qwerty.schedulerbot.data.redis.RedisCache;
 
 import java.time.Duration;
 

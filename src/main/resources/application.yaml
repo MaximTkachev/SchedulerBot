@@ -1,6 +1,6 @@
 bot:
-  username: # put your username here
-  token: # put your token here
+  username: ${BOT_USERNAME}
+  token: ${BOT_TOKEN}
   request-timeout-millis: 600000
 system:
   max-thread-number: 4

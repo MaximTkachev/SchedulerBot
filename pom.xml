@@ -10,7 +10,7 @@
     </parent>
     <groupId>ru.qwerty</groupId>
     <artifactId>SchedulerBot</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>SchedulerBot</name>
     <description>SchedulerBot</description>
     <properties>
@@ -26,11 +26,6 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
