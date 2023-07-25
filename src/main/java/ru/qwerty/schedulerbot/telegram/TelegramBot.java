@@ -4,11 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.qwerty.schedulerbot.config.BotProperties;
+import ru.qwerty.schedulerbot.config.property.BotProperties;
 import ru.qwerty.schedulerbot.core.util.Mapper;
 import ru.qwerty.schedulerbot.data.model.Message;
 import ru.qwerty.schedulerbot.exception.ServiceException;
-import ru.qwerty.schedulerbot.handler.Handler;
 import ru.qwerty.schedulerbot.handler.HandlerFactory;
 
 import java.util.concurrent.ThreadPoolExecutor;
@@ -52,39 +51,29 @@ class TelegramBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        log.info("Message was received: {}", Mapper.mapForLog(update));
+        log.info("Received message = {}", Mapper.serialize(update));
+
         threadPoolExecutor.submit(() -> {
-            logStartOfMessageHandling(update);
-            long chatId = update.getMessage().getChatId();
+            log.info(
+                    "Message handling started: chat id = {} pool size = {} queue size = {}",
+                    update.getMessage().getChat().getId(),
+                    threadPoolExecutor.getPoolSize(),
+                    threadPoolExecutor.getQueue().size()
+            );
+
             String message = handleMessage(update);
-            messageSender.send(chatId, message);
+            messageSender.send(update.getMessage().getChatId(), message);
         });
     }
 
     private String handleMessage(Update update) {
         try {
-            Message message = createMessage(update);
-            Handler handler = handlerFactory.create(message);
-            return handler.handle(message);
+            Message message = new Message(update.getMessage().getChat().getId(), update.getMessage().getText());
+            return handlerFactory.create(message).handle(message);
         } catch (ServiceException e) {
-            log.warn("Failed to handle user message from update: {}", Mapper.mapForLog(update), e);
             return e.getMessage();
         } catch (Exception e) {
-            log.error("Failed to handle user message from update: {}", Mapper.mapForLog(update), e);
             return "Произошла непредвиденная ошибка на сервере";
         }
-    }
-
-    private static Message createMessage(Update update) {
-        return new Message(update.getMessage().getChat().getId(), update.getMessage().getText());
-    }
-
-    private void logStartOfMessageHandling(Update update) {
-        log.info(
-                "Message was added to pool. Chat id: {}. Current pool size: {}. Current queue size: {}",
-                update.getMessage().getChat().getId(),
-                threadPoolExecutor.getPoolSize(),
-                threadPoolExecutor.getQueue().size()
-        );
     }
 }

@@ -18,13 +18,13 @@ public class StartHandler implements Handler {
     private static final String SUCCESSFUL_RESULT_MESSAGE
             = "Добро пожаловать!\nВведите " + Command.GET_MENU + " чтобы получить список доступных команд";
 
-    private final UserConverter converter;
+    private final UserConverter userConverter;
 
-    private final UserService service;
+    private final UserService userService;
 
     @Override
     public String handle(Message message) {
-        service.save(converter.convertToEntity(message));
+        userService.save(userConverter.convertToEntity(message));
         log.info("User was registered from user message; {}", message);
         return SUCCESSFUL_RESULT_MESSAGE;
     }
