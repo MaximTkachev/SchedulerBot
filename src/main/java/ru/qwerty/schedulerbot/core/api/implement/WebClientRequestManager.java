@@ -5,7 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
-import ru.qwerty.schedulerbot.config.BotProperties;
+import ru.qwerty.schedulerbot.config.property.BotProperties;
 import ru.qwerty.schedulerbot.core.api.RequestManager;
 import ru.qwerty.schedulerbot.core.util.Mapper;
 import ru.qwerty.schedulerbot.data.model.Response;
@@ -17,6 +17,7 @@ import java.text.SimpleDateFormat;
 import java.time.Clock;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Slf4j
 @Component
@@ -36,21 +37,21 @@ public class WebClientRequestManager implements RequestManager {
 
     private final long requestTimeoutMillis;
 
-    private long lastRequestForGroupsMillis;
+    private final AtomicLong lastRequestForGroupsMillis;
 
     public WebClientRequestManager(Clock clock, BotProperties config) {
         this.clock = clock;
         this.requestTimeoutMillis = config.getRequestTimeoutMillis();
-        this.lastRequestForGroupsMillis = 1;
+        this.lastRequestForGroupsMillis = new AtomicLong();
     }
 
     @Override
     public List<Group> fetchGroups() throws JsonProcessingException {
-        if (lastRequestForGroupsMillis + requestTimeoutMillis > clock.millis()) {
-            log.warn("It's too early to send request for groups");
+        if (lastRequestForGroupsMillis.get() + requestTimeoutMillis > clock.millis()) {
+            log.warn("Unable to send request for groups due to timeout");
             throw new ActionNotAllowedException(Response.ACTION_NOT_ALLOWED);
         }
-        lastRequestForGroupsMillis = clock.millis();
+        lastRequestForGroupsMillis.set(clock.millis());
 
         return Mapper.deserialize(sendGetRequest(GET_GROUPS_URL), GROUP_LIST_TYPE_REFERENCE);
     }

@@ -20,5 +20,5 @@ server:
   port: 8080
 
 redis:
-  host: redis
+  host-name: redis
   port: 6379

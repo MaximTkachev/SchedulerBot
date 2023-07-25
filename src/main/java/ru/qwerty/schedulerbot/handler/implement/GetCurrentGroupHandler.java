@@ -30,6 +30,7 @@ public class GetCurrentGroupHandler implements Handler {
         if (group == null) {
             return GROUP_NOT_SET_MESSAGE;
         }
+
         return SUCCESSFUL_RESULT_MESSAGE + group.getNumber();
     }
 }

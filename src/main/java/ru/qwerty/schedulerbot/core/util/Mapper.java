@@ -22,6 +22,8 @@ public final class Mapper {
             .setSerializationInclusion(JsonInclude.Include.NON_NULL)
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
+    private static final String EMPTY_SCHEDULE_TEMPLATE = "%s пар нет. Поздравляем!";
+
     private static final String TITLE_TEMPLATE = "Ваше расписание на %s:\n";
 
     private static final String LESSON_MAPPING_TEMPLATE = "%s - %s (%s)";
@@ -35,6 +37,10 @@ public final class Mapper {
 
     public static String serializeDaySchedule(DaySchedule daySchedule) {
         daySchedule.filter();
+        if (daySchedule.getLessons().isEmpty()) {
+            return String.format(EMPTY_SCHEDULE_TEMPLATE, convertStringDate(daySchedule.getDate()));
+        }
+
         StringBuilder sb = new StringBuilder(String.format(TITLE_TEMPLATE, convertStringDate(daySchedule.getDate())));
         daySchedule.getLessons().forEach(lesson -> sb.append(mapLesson(lesson)));
         return sb.toString();
@@ -62,6 +68,7 @@ public final class Mapper {
     private static String convertStringDate(String date) {
         SimpleDateFormat inputFormatter = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat outputFormatter = new SimpleDateFormat("dd.MM.yyyy");
+
         try {
             return outputFormatter.format(inputFormatter.parse(date));
         } catch (ParseException e) {

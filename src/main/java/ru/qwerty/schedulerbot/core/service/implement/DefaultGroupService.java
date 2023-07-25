@@ -36,11 +36,6 @@ public class DefaultGroupService implements GroupService {
 
     private final RequestManager requestManager;
 
-    @Transactional
-    public void saveAll(List<GroupEntity> entities) {
-        repository.saveAll(entities);
-    }
-
     @Override
     @Transactional
     public GroupEntity getByNumber(String number) {
@@ -83,7 +78,8 @@ public class DefaultGroupService implements GroupService {
             List<GroupEntity> entities = groupsForSave.stream()
                     .map(converter::convertToEntity)
                     .collect(Collectors.toList());
-            this.saveAll(entities);
+
+            repository.saveAll(entities);
         } catch (Exception e) {
             log.error("Failed to update groups: {}", groupsForSave, e);
         }
@@ -91,6 +87,8 @@ public class DefaultGroupService implements GroupService {
     }
 
     private Optional<Group> findByNumberInList(List<Group> groups, String number) {
-        return groups.stream().filter(el -> Objects.equals(el.getName(), number)).findFirst();
+        return groups.stream()
+                .filter(el -> Objects.equals(el.getName(), number))
+                .findFirst();
     }
 }
