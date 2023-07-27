@@ -1,6 +1,5 @@
 package ru.qwerty.schedulerbot.config;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
@@ -10,6 +9,7 @@ import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.RedisSerializer;
+import ru.qwerty.schedulerbot.config.property.RedisProperties;
 import ru.qwerty.schedulerbot.data.redis.RedisCache;
 
 import java.time.Duration;
@@ -19,13 +19,10 @@ import java.time.Duration;
 public class RedisConfig {
 
     @Bean
-    public JedisConnectionFactory jedisConnectionFactory(
-            @Value("${redis.host}") String hostName,
-            @Value("${redis.port}") int port
-    ) {
+    public JedisConnectionFactory jedisConnectionFactory(RedisProperties property) {
         RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration();
-        configuration.setHostName(hostName);
-        configuration.setPort(port);
+        configuration.setHostName(property.getHostName());
+        configuration.setPort(property.getPort());
         return new JedisConnectionFactory(configuration);
     }
 
@@ -36,9 +33,7 @@ public class RedisConfig {
                 .entryTtl(Duration.ofDays(1))
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(RedisSerializer.json()));
 
-        return RedisCacheManager
-                .RedisCacheManagerBuilder
-                .fromConnectionFactory(jedisConnectionFactory)
+        return RedisCacheManager.RedisCacheManagerBuilder.fromConnectionFactory(jedisConnectionFactory)
                 .cacheDefaults(redisCacheConfiguration)
                 .initialCacheNames(RedisCache.ALL)
                 .build();

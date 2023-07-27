@@ -5,7 +5,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.qwerty.schedulerbot.data.model.dto.DaySchedule;
 import ru.qwerty.schedulerbot.data.model.dto.Lesson;
 import ru.qwerty.schedulerbot.exception.UnexpectedServerDataException;
@@ -14,13 +13,17 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
+import java.util.stream.Collectors;
 
 public final class Mapper {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper()
             .setSerializationInclusion(JsonInclude.Include.NON_NULL)
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+    private static final String EMPTY_SCHEDULE_TEMPLATE = "%s пар нет. Поздравляем!";
 
     private static final String TITLE_TEMPLATE = "Ваше расписание на %s:\n";
 
@@ -33,19 +36,35 @@ public final class Mapper {
         return OBJECT_MAPPER.readValue(value, typeReference);
     }
 
+    public static String serialize(Object object) {
+        try {
+            return OBJECT_MAPPER.writeValueAsString(object);
+        } catch (JsonProcessingException e) {
+            return object.toString();
+        }
+    }
+
     public static String serializeDaySchedule(DaySchedule daySchedule) {
-        daySchedule.filter();
+        daySchedule = filterSchedule(daySchedule);
+        if (daySchedule.getLessons().isEmpty()) {
+            return String.format(EMPTY_SCHEDULE_TEMPLATE, convertStringDate(daySchedule.getDate()));
+        }
+
         StringBuilder sb = new StringBuilder(String.format(TITLE_TEMPLATE, convertStringDate(daySchedule.getDate())));
         daySchedule.getLessons().forEach(lesson -> sb.append(mapLesson(lesson)));
         return sb.toString();
     }
 
-    public static String mapForLog(Update update) {
-        try {
-            return OBJECT_MAPPER.writeValueAsString(update);
-        } catch (JsonProcessingException e) {
-            return update.toString();
-        }
+    private static DaySchedule filterSchedule(DaySchedule schedule) {
+        List<Lesson> lessons = schedule.getLessons()
+                .stream()
+                .filter(lesson -> lesson.getType() != Lesson.ScheduleType.EMPTY)
+                .collect(Collectors.toList());
+
+        return DaySchedule.builder()
+                .date(schedule.getDate())
+                .lessons(lessons)
+                .build();
     }
 
     private static String mapLesson(Lesson lesson) {
@@ -62,6 +81,7 @@ public final class Mapper {
     private static String convertStringDate(String date) {
         SimpleDateFormat inputFormatter = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat outputFormatter = new SimpleDateFormat("dd.MM.yyyy");
+
         try {
             return outputFormatter.format(inputFormatter.parse(date));
         } catch (ParseException e) {

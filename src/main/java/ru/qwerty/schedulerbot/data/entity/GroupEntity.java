@@ -1,6 +1,7 @@
 package ru.qwerty.schedulerbot.data.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,6 +17,7 @@ import javax.persistence.Table;
 @Getter
 @Setter
 @Entity
+@Builder
 @Table(name = "groups")
 @NoArgsConstructor
 @AllArgsConstructor

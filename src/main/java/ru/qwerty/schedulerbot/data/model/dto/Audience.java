@@ -1,8 +1,12 @@
 package ru.qwerty.schedulerbot.data.model.dto;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Value;
+import lombok.extern.jackson.Jacksonized;
 
-@Data
+@Value
+@Builder
+@Jacksonized
 public class Audience {
 
     String id;

@@ -15,6 +15,9 @@ import ru.qwerty.schedulerbot.exception.UnexpectedServerDataException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * The default implementation of the {@link ScheduleService} interface.
+ */
 @Service
 public class DefaultScheduleService implements ScheduleService {
 

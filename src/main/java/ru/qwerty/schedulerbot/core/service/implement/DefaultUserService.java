@@ -23,7 +23,9 @@ public class DefaultUserService implements UserService {
     @Override
     @Transactional(readOnly = true)
     public UserEntity getById(long id) {
-        return userRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException(Response.USER_NOT_FOUND));
+        return userRepository.findById(id).orElseThrow(
+                () -> new ObjectNotFoundException(Response.USER_NOT_FOUND)
+        );
     }
 
     @Override

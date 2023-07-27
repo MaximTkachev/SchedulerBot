@@ -2,8 +2,10 @@ bot:
   username: ${BOT_USERNAME}
   token: ${BOT_TOKEN}
   request-timeout-millis: 600000
+
 system:
   max-thread-number: 4
+
 spring:
   datasource:
     url: jdbc:postgresql://db:5432/hitsbot
@@ -13,8 +15,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+
 server:
   port: 8080
+
 redis:
-  host: redis
+  host-name: redis
   port: 6379

@@ -19,11 +19,11 @@ public class DefaultUserConverter implements UserConverter {
     private final Clock clock;
 
     @Override
-    public UserEntity convertToEntity(Message message) {
-        UserEntity user = new UserEntity();
-        user.setId(message.getId());
-        user.setCreationDate(new Date(clock.millis()));
-        user.setIsSubscribed(false);
-        return user;
+    public UserEntity map(Message message) {
+        return UserEntity.builder()
+                .id(message.getId())
+                .creationDate(new Date(clock.millis()))
+                .isSubscribed(false)
+                .build();
     }
 }

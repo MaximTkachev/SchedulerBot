@@ -1,10 +1,14 @@
 package ru.qwerty.schedulerbot.data.model.dto;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Value;
+import lombok.extern.jackson.Jacksonized;
 
 import java.util.List;
 
-@Data
+@Value
+@Builder
+@Jacksonized
 public class Lesson {
 
     public enum ScheduleType {
@@ -12,27 +16,24 @@ public class Lesson {
         LESSON
     }
 
-    private ScheduleType type;
+    ScheduleType type;
 
-    private String id;
+    String id;
 
-    private String title;
+    String title;
 
-    private LessonType lessonType;
+    LessonType lessonType;
 
-    private List<Group> groups;
+    List<Group> groups;
 
-    private Professor professor;
+    Professor professor;
 
-    private Audience audience;
+    Audience audience;
 
-    private Integer lessonNumber;
+    Integer lessonNumber;
 
-    private Integer starts;
+    Integer starts;
 
-    private Integer ends;
+    Integer ends;
 
-    public Boolean isNotEmpty() {
-        return type != ScheduleType.EMPTY;
-    }
 }

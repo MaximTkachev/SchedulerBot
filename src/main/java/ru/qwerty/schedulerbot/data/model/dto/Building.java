@@ -1,17 +1,21 @@
 package ru.qwerty.schedulerbot.data.model.dto;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Value;
+import lombok.extern.jackson.Jacksonized;
 
-@Data
+@Value
+@Builder
+@Jacksonized
 public class Building {
 
-    private String id;
+    String id;
 
-    private String name;
+    String name;
 
-    private String address;
+    String address;
 
-    private Double latitude;
+    Double latitude;
 
-    private Double longitude;
+    Double longitude;
 }

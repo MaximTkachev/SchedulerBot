@@ -2,7 +2,7 @@ package ru.qwerty.schedulerbot.handler.implement;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Component;
 import ru.qwerty.schedulerbot.core.service.ScheduleService;
 import ru.qwerty.schedulerbot.core.service.UserService;
 import ru.qwerty.schedulerbot.data.entity.GroupEntity;
@@ -17,6 +17,7 @@ import java.util.Date;
  * The handler is used for the case when a user wants to get a schedule for the current day.
  */
 @Slf4j
+@Component
 @RequiredArgsConstructor
 public class GetScheduleHandler implements Handler {
 
