@@ -1,18 +1,18 @@
 package ru.qwerty.schedulerbot.data.model.dto;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Value;
+import lombok.extern.jackson.Jacksonized;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-@Data
+@Value
+@Builder
+@Jacksonized
 public class DaySchedule {
 
-    private String date;
+    String date;
 
-    private List<Lesson> lessons;
+    List<Lesson> lessons;
 
-    public void filter() {
-        this.lessons = lessons.stream().filter(Lesson::isNotEmpty).collect(Collectors.toList());
-    }
 }

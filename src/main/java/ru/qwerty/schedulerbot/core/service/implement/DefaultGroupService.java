@@ -50,7 +50,7 @@ public class DefaultGroupService implements GroupService {
 
         Optional<Group> group = findByNumberInList(groups, number);
         if (group.isPresent()) {
-            return converter.convertToEntity(group.get());
+            return converter.map(group.get());
         }
         throw new ObjectNotFoundException(Response.GROUP_NOT_FOUND);
     }
@@ -76,7 +76,7 @@ public class DefaultGroupService implements GroupService {
         log.info("Update groups: {}", groupsForSave);
         try {
             List<GroupEntity> entities = groupsForSave.stream()
-                    .map(converter::convertToEntity)
+                    .map(converter::map)
                     .collect(Collectors.toList());
 
             repository.saveAll(entities);

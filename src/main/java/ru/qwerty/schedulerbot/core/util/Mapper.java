@@ -13,7 +13,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
+import java.util.stream.Collectors;
 
 public final class Mapper {
 
@@ -43,7 +45,7 @@ public final class Mapper {
     }
 
     public static String serializeDaySchedule(DaySchedule daySchedule) {
-        daySchedule.filter();
+        daySchedule = filterSchedule(daySchedule);
         if (daySchedule.getLessons().isEmpty()) {
             return String.format(EMPTY_SCHEDULE_TEMPLATE, convertStringDate(daySchedule.getDate()));
         }
@@ -51,6 +53,18 @@ public final class Mapper {
         StringBuilder sb = new StringBuilder(String.format(TITLE_TEMPLATE, convertStringDate(daySchedule.getDate())));
         daySchedule.getLessons().forEach(lesson -> sb.append(mapLesson(lesson)));
         return sb.toString();
+    }
+
+    private static DaySchedule filterSchedule(DaySchedule schedule) {
+        List<Lesson> lessons = schedule.getLessons()
+                .stream()
+                .filter(lesson -> lesson.getType() != Lesson.ScheduleType.EMPTY)
+                .collect(Collectors.toList());
+
+        return DaySchedule.builder()
+                .date(schedule.getDate())
+                .lessons(lessons)
+                .build();
     }
 
     private static String mapLesson(Lesson lesson) {

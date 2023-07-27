@@ -3,10 +3,6 @@ package ru.qwerty.schedulerbot.handler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import ru.qwerty.schedulerbot.core.service.GroupService;
-import ru.qwerty.schedulerbot.core.service.ScheduleService;
-import ru.qwerty.schedulerbot.core.service.UserService;
-import ru.qwerty.schedulerbot.data.converter.UserConverter;
 import ru.qwerty.schedulerbot.data.model.Command;
 import ru.qwerty.schedulerbot.data.model.Message;
 import ru.qwerty.schedulerbot.handler.implement.UnknownCommandHandler;
@@ -18,8 +14,6 @@ import ru.qwerty.schedulerbot.handler.implement.StartHandler;
 import ru.qwerty.schedulerbot.handler.implement.SubscribeHandler;
 import ru.qwerty.schedulerbot.handler.implement.UnsubscribeHandler;
 
-import java.time.Clock;
-
 /**
  * This component is used to create a user command handler.
  */
@@ -28,45 +22,51 @@ import java.time.Clock;
 @RequiredArgsConstructor
 public class HandlerFactory {
 
-    private final UserConverter userConverter;
+    private final GetCurrentGroupHandler getCurrentGroupHandler;
 
-    private final UserService userService;
+    private final GetMenuHandler getMenuHandler;
 
-    private final GroupService groupService;
+    private final GetScheduleHandler getScheduleHandler;
 
-    private final ScheduleService scheduleService;
+    private final SetGroupHandler setGroupHandler;
 
-    private final Clock clock;
+    private final StartHandler startHandler;
+
+    private final SubscribeHandler subscribeHandler;
+
+    private final UnknownCommandHandler unknownCommandHandler;
+
+    private final UnsubscribeHandler unsubscribeHandler;
 
     public Handler create(Message message) {
         if (message.getText() == null || message.getText().isEmpty()) {
-            return new UnknownCommandHandler();
+            return unknownCommandHandler;
         }
 
         Command command = Command.fromString(message.getText().split(" ")[0]);
         if (command == null) {
             log.warn("Failed to get command from user message: {}", message);
-            return new UnknownCommandHandler();
+            return unknownCommandHandler;
         }
 
         switch (command) {
             case GET_CURRENT_GROUP:
-                return new GetCurrentGroupHandler(userService);
+                return getCurrentGroupHandler;
             case GET_MENU:
-                return new GetMenuHandler();
+                return getMenuHandler;
             case GET_SCHEDULE:
-                return new GetScheduleHandler(userService, scheduleService, clock);
+                return getScheduleHandler;
             case SET_GROUP:
-                return new SetGroupHandler(groupService, userService);
+                return setGroupHandler;
             case START:
-                return new StartHandler(userConverter, userService);
+                return startHandler;
             case SUBSCRIBE:
-                return new SubscribeHandler(userService);
+                return subscribeHandler;
             case UNSUBSCRIBE:
-                return new UnsubscribeHandler(userService);
+                return unsubscribeHandler;
             default:
                 log.error("Failed to create handler from user message: {}. Command: {}", message, command);
-                return new UnknownCommandHandler();
+                return unknownCommandHandler;
         }
     }
 }

@@ -12,11 +12,10 @@ import ru.qwerty.schedulerbot.data.model.dto.Group;
 public class DefaultGroupConverter implements GroupConverter {
 
     @Override
-    public GroupEntity convertToEntity(Group group) {
-        GroupEntity entity = new GroupEntity();
-        entity.setId(group.getId());
-        entity.setNumber(group.getName());
-
-        return entity;
+    public GroupEntity map(Group group) {
+        return GroupEntity.builder()
+                .id(group.getId())
+                .number(group.getName())
+                .build();
     }
 }

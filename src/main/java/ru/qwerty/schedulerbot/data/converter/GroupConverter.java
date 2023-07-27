@@ -8,5 +8,5 @@ import ru.qwerty.schedulerbot.data.model.dto.Group;
  */
 public interface GroupConverter {
 
-    GroupEntity convertToEntity(Group group);
+    GroupEntity map(Group group);
 }

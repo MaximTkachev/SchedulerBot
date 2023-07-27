@@ -1,5 +1,6 @@
 package ru.qwerty.schedulerbot.handler.implement;
 
+import org.springframework.stereotype.Component;
 import ru.qwerty.schedulerbot.data.model.Command;
 import ru.qwerty.schedulerbot.data.model.Message;
 import ru.qwerty.schedulerbot.handler.Handler;
@@ -7,6 +8,7 @@ import ru.qwerty.schedulerbot.handler.Handler;
 /**
  * The handler is used for the case when a user wants to get a list of available bot commands.
  */
+@Component
 public class GetMenuHandler implements Handler {
 
     private static final String MESSAGE = Command.GET_CURRENT_GROUP + " получить вашу группу по умолчанию\n" +

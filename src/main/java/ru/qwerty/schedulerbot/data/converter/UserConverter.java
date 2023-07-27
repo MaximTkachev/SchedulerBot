@@ -8,5 +8,5 @@ import ru.qwerty.schedulerbot.data.model.Message;
  */
 public interface UserConverter {
 
-    UserEntity convertToEntity(Message message);
+    UserEntity map(Message message);
 }
