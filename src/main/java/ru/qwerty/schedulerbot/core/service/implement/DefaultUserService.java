@@ -22,7 +22,7 @@ public class DefaultUserService implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public UserEntity getById(long id) {
+    public UserEntity get(long id) {
         return userRepository.findById(id).orElseThrow(
                 () -> new ObjectNotFoundException(Response.USER_NOT_FOUND)
         );
@@ -41,7 +41,7 @@ public class DefaultUserService implements UserService {
     @Override
     @Transactional
     public void update(long id, UserChanges userChanges) {
-        UserEntity user = getById(id);
+        UserEntity user = get(id);
 
         if (userChanges.getGroup() != null) {
             user.setGroup(userChanges.getGroup());

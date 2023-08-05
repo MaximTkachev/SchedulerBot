@@ -38,7 +38,7 @@ public class DefaultGroupService implements GroupService {
 
     @Override
     @Transactional
-    public GroupEntity getByNumber(String number) {
+    public GroupEntity get(String number) {
         Validator.checkGroupNumber(number);
         Optional<GroupEntity> groupEntity = repository.findByNumber(number);
         if (groupEntity.isPresent()) {
@@ -48,10 +48,12 @@ public class DefaultGroupService implements GroupService {
         List<Group> groups = fetchGroupsFromServer();
         updateGroups(groups);
 
-        Optional<Group> group = findByNumberInList(groups, number);
-        if (group.isPresent()) {
-            return converter.map(group.get());
+        for (Group group: groups) {
+            if (Objects.equals(group.getName(), number)) {
+                return converter.map(group);
+            }
         }
+
         throw new ObjectNotFoundException(Response.GROUP_NOT_FOUND);
     }
 
@@ -84,11 +86,5 @@ public class DefaultGroupService implements GroupService {
             log.error("Failed to update groups: {}", groupsForSave, e);
         }
         log.info("Update groups successfully: {}", groupsForSave);
-    }
-
-    private Optional<Group> findByNumberInList(List<Group> groups, String number) {
-        return groups.stream()
-                .filter(el -> Objects.equals(el.getName(), number))
-                .findFirst();
     }
 }

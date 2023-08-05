@@ -32,7 +32,7 @@ public class GetScheduleHandler implements Handler {
 
     @Override
     public String handle(Message message) {
-        GroupEntity group = userService.getById(message.getId()).getGroup();
+        GroupEntity group = userService.get(message.getId()).getGroup();
         if (group == null) {
             return GROUP_NOT_SET_MESSAGE;
         }

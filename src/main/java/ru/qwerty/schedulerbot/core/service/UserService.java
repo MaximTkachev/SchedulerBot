@@ -8,7 +8,7 @@ import ru.qwerty.schedulerbot.data.model.UserChanges;
  */
 public interface UserService {
 
-    UserEntity getById(long id);
+    UserEntity get(long id);
 
     void save(UserEntity user);
 

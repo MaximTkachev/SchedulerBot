@@ -27,7 +27,7 @@ public class SetGroupHandler implements Handler {
     @Override
     public String handle(Message message) {
         String groupNumber = getGroupFromMessage(message.getText());
-        GroupEntity group = groupService.getByNumber(groupNumber);
+        GroupEntity group = groupService.get(groupNumber);
 
         UserChanges userChanges = new UserChanges();
         userChanges.setGroup(group);

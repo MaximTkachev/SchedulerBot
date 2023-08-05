@@ -1,6 +1,5 @@
 package ru.qwerty.schedulerbot.core.api;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import ru.qwerty.schedulerbot.data.model.dto.DaySchedule;
 import ru.qwerty.schedulerbot.data.model.dto.Group;
 
@@ -12,7 +11,7 @@ import java.util.List;
  */
 public interface RequestManager {
 
-    List<Group> fetchGroups() throws JsonProcessingException;
+    List<Group> fetchGroups();
 
-    DaySchedule fetchSchedule(String groupId, Date date) throws JsonProcessingException;
+    DaySchedule fetchSchedule(String groupId, Date date);
 }

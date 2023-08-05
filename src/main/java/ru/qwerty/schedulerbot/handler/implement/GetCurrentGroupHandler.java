@@ -27,7 +27,7 @@ public class GetCurrentGroupHandler implements Handler {
 
     @Override
     public String handle(Message message) {
-        UserEntity userEntity = userService.getById(message.getId());
+        UserEntity userEntity = userService.get(message.getId());
         GroupEntity group = userEntity.getGroup();
         if (group == null) {
             return GROUP_NOT_SET_MESSAGE;

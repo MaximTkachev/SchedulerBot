@@ -32,8 +32,12 @@ public final class Mapper {
     private Mapper() {
     }
 
-    public static <T> T deserialize(String value, TypeReference<T> typeReference) throws JsonProcessingException {
-        return OBJECT_MAPPER.readValue(value, typeReference);
+    public static <T> T deserialize(String value, TypeReference<T> typeReference) {
+        try {
+            return OBJECT_MAPPER.readValue(value, typeReference);
+        } catch (Exception e) {
+            throw new UnexpectedServerDataException();
+        }
     }
 
     public static String serialize(Object object) {

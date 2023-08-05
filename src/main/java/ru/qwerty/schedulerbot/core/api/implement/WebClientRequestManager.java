@@ -1,6 +1,5 @@
 package ru.qwerty.schedulerbot.core.api.implement;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -46,7 +45,7 @@ public class WebClientRequestManager implements RequestManager {
     }
 
     @Override
-    public List<Group> fetchGroups() throws JsonProcessingException {
+    public List<Group> fetchGroups() {
         if (lastRequestForGroupsMillis.get() + requestTimeoutMillis > clock.millis()) {
             log.warn("Unable to send request for groups due to timeout");
             throw new ActionNotAllowedException(Response.ACTION_NOT_ALLOWED);
@@ -57,7 +56,7 @@ public class WebClientRequestManager implements RequestManager {
     }
 
     @Override
-    public DaySchedule fetchSchedule(String groupId, Date date) throws JsonProcessingException {
+    public DaySchedule fetchSchedule(String groupId, Date date) {
         String dateString = convertDateToString(date);
         String response = sendGetRequest(String.format(GET_SCHEDULE_URL_TEMPLATE, groupId, dateString, dateString));
         return Mapper.deserialize(response, DAY_SCHEDULE_LIST_TYPE_REFERENCE).get(0);
