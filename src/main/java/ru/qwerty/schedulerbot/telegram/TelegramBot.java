@@ -5,10 +5,13 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.qwerty.schedulerbot.config.property.BotProperties;
-import ru.qwerty.schedulerbot.core.util.Mapper;
+import ru.qwerty.schedulerbot.core.util.SerializationUtils;
 import ru.qwerty.schedulerbot.data.model.Message;
 import ru.qwerty.schedulerbot.exception.ServiceException;
 import ru.qwerty.schedulerbot.handler.HandlerFactory;
+import ru.qwerty.schedulerbot.message.Language;
+import ru.qwerty.schedulerbot.message.MessageFactory;
+import ru.qwerty.schedulerbot.message.MessageKey;
 
 import java.util.concurrent.ThreadPoolExecutor;
 
@@ -27,13 +30,13 @@ class TelegramBot extends TelegramLongPollingBot {
     private final ThreadPoolExecutor threadPoolExecutor;
 
     TelegramBot(
-            BotProperties config,
+            BotProperties properties,
             MessageSender messageSender,
             HandlerFactory handlerFactory,
             ThreadPoolExecutor threadPoolExecutor
     ) {
-        this.botUsername = config.getUsername();
-        this.botToken = config.getToken();
+        this.botUsername = properties.getUsername();
+        this.botToken = properties.getToken();
         this.messageSender = messageSender;
         this.handlerFactory = handlerFactory;
         this.threadPoolExecutor = threadPoolExecutor;
@@ -51,7 +54,7 @@ class TelegramBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        log.info("Received message = {}", Mapper.serialize(update));
+        log.info("Received message = {}", SerializationUtils.serialize(update));
 
         threadPoolExecutor.submit(() -> {
             log.info(
@@ -61,19 +64,30 @@ class TelegramBot extends TelegramLongPollingBot {
                     threadPoolExecutor.getQueue().size()
             );
 
-            String message = handleMessage(update);
-            messageSender.send(update.getMessage().getChatId(), message);
+            messageSender.send(update.getMessage().getChatId(), handleMessage(update));
         });
     }
 
     private String handleMessage(Update update) {
+        Language language = createLanguage(update.getMessage().getFrom().getLanguageCode());
         try {
-            Message message = new Message(update.getMessage().getChat().getId(), update.getMessage().getText());
+            Message message = new Message(
+                    update.getMessage().getChat().getId(),
+                    update.getMessage().getText(),
+                    language
+            );
+
             return handlerFactory.create(message).handle(message);
         } catch (ServiceException e) {
-            return e.getMessage();
+            return MessageFactory.createMessage(language, e.getMessageKey());
         } catch (Exception e) {
-            return "Произошла непредвиденная ошибка на сервере";
+            log.error("Unexpected internal error", e);
+            return MessageFactory.createMessage(language, MessageKey.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    private Language createLanguage(String languageCode) {
+        Language language = Language.fromString(languageCode);
+        return language != null ? language : Language.getDefault();
     }
 }

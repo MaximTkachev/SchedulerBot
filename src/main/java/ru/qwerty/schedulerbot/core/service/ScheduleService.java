@@ -1,5 +1,7 @@
 package ru.qwerty.schedulerbot.core.service;
 
+import ru.qwerty.schedulerbot.data.model.dto.Schedule;
+
 import java.util.Date;
 
 /**
@@ -7,5 +9,5 @@ import java.util.Date;
  */
 public interface ScheduleService {
 
-    String get(String groupId, Date date);
+    Schedule get(String groupId, Date date);
 }

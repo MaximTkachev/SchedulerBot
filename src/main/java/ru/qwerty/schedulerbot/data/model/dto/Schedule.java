@@ -9,10 +9,9 @@ import java.util.List;
 @Value
 @Builder
 @Jacksonized
-public class DaySchedule {
+public class Schedule {
 
     String date;
 
     List<Lesson> lessons;
-
 }

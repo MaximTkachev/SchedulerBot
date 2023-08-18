@@ -6,7 +6,7 @@ import ru.qwerty.schedulerbot.data.model.Message;
 /**
  * The interface is used to convert instances of classes associated with users.
  */
-public interface UserConverter {
+public interface UserMapper {
 
     UserEntity map(Message message);
 }

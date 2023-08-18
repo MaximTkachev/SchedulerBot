@@ -13,9 +13,9 @@ class MessageSender extends DefaultAbsSender {
 
     private final String botToken;
 
-    MessageSender(BotProperties config) {
+    MessageSender(BotProperties properties) {
         super(new DefaultBotOptions());
-        this.botToken = config.getToken();
+        this.botToken = properties.getToken();
     }
 
     @Override

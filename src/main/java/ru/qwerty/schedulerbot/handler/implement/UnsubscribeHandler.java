@@ -6,6 +6,8 @@ import ru.qwerty.schedulerbot.core.service.UserService;
 import ru.qwerty.schedulerbot.data.model.Message;
 import ru.qwerty.schedulerbot.data.model.UserChanges;
 import ru.qwerty.schedulerbot.handler.Handler;
+import ru.qwerty.schedulerbot.message.MessageFactory;
+import ru.qwerty.schedulerbot.message.MessageKey;
 
 /**
  * The handler is used for the case when a user wants to unsubscribe from the daily schedule mailing.
@@ -14,16 +16,15 @@ import ru.qwerty.schedulerbot.handler.Handler;
 @RequiredArgsConstructor
 public class UnsubscribeHandler implements Handler {
 
-    private static final String SUCCESSFUL_RESULT_MESSAGE = "Вы успешно отписались от ежедневной рассылки расписания";
-
     private final UserService userService;
 
     @Override
     public String handle(Message message) {
-        UserChanges userChanges = new UserChanges();
-        userChanges.setIsSubscribed(false);
+        UserChanges userChanges = UserChanges.builder()
+                .isSubscribed(false)
+                .build();
         userService.update(message.getId(), userChanges);
 
-        return SUCCESSFUL_RESULT_MESSAGE;
+        return MessageFactory.createMessage(message.getLanguage(), MessageKey.UNSUBSCRIBE_RESPONSE);
     }
 }

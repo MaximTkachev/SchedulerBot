@@ -1,10 +1,13 @@
 bot:
   username: ${BOT_USERNAME}
   token: ${BOT_TOKEN}
-  request-timeout-millis: 600000
 
 system:
   max-thread-number: 4
+
+in-time:
+  host: https://intime.tsu.ru
+  request-timeout-millis: 600000
 
 spring:
   datasource:
