@@ -18,7 +18,7 @@ public class UnknownCommandHandler implements Handler {
         return MessageFactory.createMessage(
                 message.getLanguage(),
                 MessageKey.UNKNOWN_COMMAND_RESPONSE,
-                Command.SET_GROUP
+                Command.GET_MENU
         );
     }
 }
