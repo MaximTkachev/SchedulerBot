@@ -4,6 +4,8 @@ import org.springframework.stereotype.Component;
 import ru.qwerty.schedulerbot.data.model.Command;
 import ru.qwerty.schedulerbot.data.model.Message;
 import ru.qwerty.schedulerbot.handler.Handler;
+import ru.qwerty.schedulerbot.message.MessageFactory;
+import ru.qwerty.schedulerbot.message.MessageKey;
 
 /**
  * The handler is used for the case when a user sent an invalid command.
@@ -11,11 +13,12 @@ import ru.qwerty.schedulerbot.handler.Handler;
 @Component
 public class UnknownCommandHandler implements Handler {
 
-    private static final String MESSAGE
-            = "Неизвестная команда.\nПолучите список доступных команд, используя команду " + Command.GET_MENU;
-
     @Override
     public String handle(Message message) {
-        return MESSAGE;
+        return MessageFactory.createMessage(
+                message.getLanguage(),
+                MessageKey.UNKNOWN_COMMAND_RESPONSE,
+                Command.GET_MENU
+        );
     }
 }

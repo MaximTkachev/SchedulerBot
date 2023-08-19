@@ -5,17 +5,16 @@ import lombok.Getter;
 /**
  * The enum contains a list of user commands.
  */
+@Getter
 public enum Command {
-
-    GET_CURRENT_GROUP("/get-group"),
-    GET_MENU("/menu"),
-    GET_SCHEDULE("/get"),
-    SET_GROUP("/set-group"),
+    GET_GROUP("/gg"),
+    GET_MENU("/m"),
+    GET_SCHEDULE("/s"),
+    SET_GROUP("/sg"),
     START("/start"),
-    SUBSCRIBE("/subscribe"),
-    UNSUBSCRIBE("/unsubscribe");
+    SUBSCRIBE("/sub"),
+    UNSUBSCRIBE("/unsub");
 
-    @Getter
     private final String value;
 
     Command(String value){

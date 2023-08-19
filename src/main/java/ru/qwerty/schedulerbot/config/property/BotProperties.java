@@ -15,6 +15,4 @@ public class BotProperties {
     private String username;
 
     private String token;
-
-    private Long requestTimeoutMillis;
 }

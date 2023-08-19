@@ -7,5 +7,5 @@ import ru.qwerty.schedulerbot.data.entity.GroupEntity;
  */
 public interface GroupService {
 
-    GroupEntity getByNumber(String number);
+    GroupEntity get(String number);
 }

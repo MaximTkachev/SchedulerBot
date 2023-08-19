@@ -1,14 +1,10 @@
 package ru.qwerty.schedulerbot.exception;
 
-import ru.qwerty.schedulerbot.data.model.Response;
+import ru.qwerty.schedulerbot.message.MessageKey;
 
 public class InternalException extends ServiceException {
 
     public InternalException() {
-        super(Response.INTERNAL_SERVER_ERROR);
-    }
-
-    public InternalException(Response response) {
-        super(response);
+        super(MessageKey.INTERNAL_SERVER_ERROR);
     }
 }

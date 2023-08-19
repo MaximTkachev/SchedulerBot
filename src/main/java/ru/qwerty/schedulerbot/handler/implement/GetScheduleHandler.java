@@ -9,6 +9,8 @@ import ru.qwerty.schedulerbot.data.entity.GroupEntity;
 import ru.qwerty.schedulerbot.data.model.Command;
 import ru.qwerty.schedulerbot.data.model.Message;
 import ru.qwerty.schedulerbot.handler.Handler;
+import ru.qwerty.schedulerbot.message.MessageFactory;
+import ru.qwerty.schedulerbot.message.MessageKey;
 
 import java.time.Clock;
 import java.util.Date;
@@ -21,9 +23,6 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class GetScheduleHandler implements Handler {
 
-    private static final String GROUP_NOT_SET_MESSAGE
-            = "Вы не задали свой номер группы.\nСделайте это, используя команду " + Command.SET_GROUP;
-
     private final UserService userService;
 
     private final ScheduleService scheduleService;
@@ -32,11 +31,18 @@ public class GetScheduleHandler implements Handler {
 
     @Override
     public String handle(Message message) {
-        GroupEntity group = userService.getById(message.getId()).getGroup();
+        GroupEntity group = userService.get(message.getId()).getGroup();
         if (group == null) {
-            return GROUP_NOT_SET_MESSAGE;
+            return MessageFactory.createMessage(
+                    message.getLanguage(),
+                    MessageKey.GROUP_NOT_SET_ERROR,
+                    Command.SET_GROUP
+            );
         }
 
-        return scheduleService.get(group.getId(), new Date(clock.millis()));
+        return MessageFactory.createSchedule(
+                message.getLanguage(),
+                scheduleService.get(group.getId(), new Date(clock.millis()))
+        );
     }
 }

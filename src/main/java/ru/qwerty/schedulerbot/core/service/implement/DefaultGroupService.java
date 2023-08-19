@@ -4,17 +4,17 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.qwerty.schedulerbot.core.api.RequestManager;
+import ru.qwerty.schedulerbot.core.api.TsuInTimeClient;
 import ru.qwerty.schedulerbot.core.repository.GroupRepository;
 import ru.qwerty.schedulerbot.core.service.GroupService;
 import ru.qwerty.schedulerbot.core.util.Validator;
-import ru.qwerty.schedulerbot.data.converter.GroupConverter;
+import ru.qwerty.schedulerbot.data.converter.GroupMapper;
 import ru.qwerty.schedulerbot.data.entity.GroupEntity;
-import ru.qwerty.schedulerbot.data.model.Response;
 import ru.qwerty.schedulerbot.data.model.dto.Group;
-import ru.qwerty.schedulerbot.exception.ActionNotAllowedException;
+import ru.qwerty.schedulerbot.exception.TimeoutException;
 import ru.qwerty.schedulerbot.exception.InternalException;
 import ru.qwerty.schedulerbot.exception.ObjectNotFoundException;
+import ru.qwerty.schedulerbot.message.MessageKey;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,17 +30,19 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DefaultGroupService implements GroupService {
 
-    private final GroupConverter converter;
+    private final GroupMapper groupMapper;
 
-    private final GroupRepository repository;
+    private final GroupRepository groupRepository;
 
-    private final RequestManager requestManager;
+    private final TsuInTimeClient tsuInTimeClient;
 
     @Override
     @Transactional
-    public GroupEntity getByNumber(String number) {
+    public GroupEntity get(String number) {
+        log.info("Get group: number = {}", number);
         Validator.checkGroupNumber(number);
-        Optional<GroupEntity> groupEntity = repository.findByNumber(number);
+
+        Optional<GroupEntity> groupEntity = groupRepository.findByNumber(number);
         if (groupEntity.isPresent()) {
             return groupEntity.get();
         }
@@ -48,18 +50,20 @@ public class DefaultGroupService implements GroupService {
         List<Group> groups = fetchGroupsFromServer();
         updateGroups(groups);
 
-        Optional<Group> group = findByNumberInList(groups, number);
-        if (group.isPresent()) {
-            return converter.map(group.get());
+        for (Group group: groups) {
+            if (Objects.equals(group.getName(), number)) {
+                return groupMapper.map(group);
+            }
         }
-        throw new ObjectNotFoundException(Response.GROUP_NOT_FOUND);
+
+        throw new ObjectNotFoundException(MessageKey.GROUP_NOT_FOUND);
     }
 
     private List<Group> fetchGroupsFromServer() {
         try {
-            return requestManager.fetchGroups();
-        } catch (ActionNotAllowedException e) {
-            throw new ObjectNotFoundException(Response.GROUP_NOT_FOUND);
+            return tsuInTimeClient.getGroups();
+        } catch (TimeoutException e) {
+            throw new ObjectNotFoundException(MessageKey.GROUP_NOT_FOUND);
         } catch (Exception e) {
             throw new InternalException();
         }
@@ -68,7 +72,7 @@ public class DefaultGroupService implements GroupService {
     private void updateGroups(List<Group> groups) {
         List<Group> groupsForSave = new ArrayList<>();
         for (Group group : groups) {
-            if (repository.findByNumber(group.getName()).isEmpty()) {
+            if (groupRepository.findByNumber(group.getName()).isEmpty()) {
                 groupsForSave.add(group);
             }
         }
@@ -76,19 +80,13 @@ public class DefaultGroupService implements GroupService {
         log.info("Update groups: {}", groupsForSave);
         try {
             List<GroupEntity> entities = groupsForSave.stream()
-                    .map(converter::map)
+                    .map(groupMapper::map)
                     .collect(Collectors.toList());
 
-            repository.saveAll(entities);
+            groupRepository.saveAll(entities);
         } catch (Exception e) {
             log.error("Failed to update groups: {}", groupsForSave, e);
         }
         log.info("Update groups successfully: {}", groupsForSave);
-    }
-
-    private Optional<Group> findByNumberInList(List<Group> groups, String number) {
-        return groups.stream()
-                .filter(el -> Objects.equals(el.getName(), number))
-                .findFirst();
     }
 }

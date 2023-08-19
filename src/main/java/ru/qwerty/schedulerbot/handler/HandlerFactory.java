@@ -2,11 +2,12 @@ package ru.qwerty.schedulerbot.handler;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Component;
 import ru.qwerty.schedulerbot.data.model.Command;
 import ru.qwerty.schedulerbot.data.model.Message;
 import ru.qwerty.schedulerbot.handler.implement.UnknownCommandHandler;
-import ru.qwerty.schedulerbot.handler.implement.GetCurrentGroupHandler;
+import ru.qwerty.schedulerbot.handler.implement.GetGroupHandler;
 import ru.qwerty.schedulerbot.handler.implement.GetMenuHandler;
 import ru.qwerty.schedulerbot.handler.implement.GetScheduleHandler;
 import ru.qwerty.schedulerbot.handler.implement.SetGroupHandler;
@@ -22,7 +23,7 @@ import ru.qwerty.schedulerbot.handler.implement.UnsubscribeHandler;
 @RequiredArgsConstructor
 public class HandlerFactory {
 
-    private final GetCurrentGroupHandler getCurrentGroupHandler;
+    private final GetGroupHandler getGroupHandler;
 
     private final GetMenuHandler getMenuHandler;
 
@@ -39,7 +40,7 @@ public class HandlerFactory {
     private final UnsubscribeHandler unsubscribeHandler;
 
     public Handler create(Message message) {
-        if (message.getText() == null || message.getText().isEmpty()) {
+        if (Strings.isEmpty(message.getText())) {
             return unknownCommandHandler;
         }
 
@@ -50,8 +51,8 @@ public class HandlerFactory {
         }
 
         switch (command) {
-            case GET_CURRENT_GROUP:
-                return getCurrentGroupHandler;
+            case GET_GROUP:
+                return getGroupHandler;
             case GET_MENU:
                 return getMenuHandler;
             case GET_SCHEDULE:

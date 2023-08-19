@@ -5,10 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.qwerty.schedulerbot.core.service.UserService;
 import ru.qwerty.schedulerbot.data.entity.GroupEntity;
-import ru.qwerty.schedulerbot.data.entity.UserEntity;
 import ru.qwerty.schedulerbot.data.model.Command;
 import ru.qwerty.schedulerbot.data.model.Message;
 import ru.qwerty.schedulerbot.handler.Handler;
+import ru.qwerty.schedulerbot.message.MessageFactory;
+import ru.qwerty.schedulerbot.message.MessageKey;
 
 /**
  * The handler is used for the case when a user wants to get his default group.
@@ -16,23 +17,21 @@ import ru.qwerty.schedulerbot.handler.Handler;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class GetCurrentGroupHandler implements Handler {
-
-    private static final String GROUP_NOT_SET_MESSAGE
-            = "Вы не задали свой номер группы.\nСделайте это, используя команду " + Command.SET_GROUP;
-
-    private static final String SUCCESSFUL_RESULT_MESSAGE = "Ваша группа по умолчанию: ";
+public class GetGroupHandler implements Handler {
 
     private final UserService userService;
 
     @Override
     public String handle(Message message) {
-        UserEntity userEntity = userService.getById(message.getId());
-        GroupEntity group = userEntity.getGroup();
+        GroupEntity group = userService.get(message.getId()).getGroup();
         if (group == null) {
-            return GROUP_NOT_SET_MESSAGE;
+            return MessageFactory.createMessage(
+                    message.getLanguage(),
+                    MessageKey.GROUP_NOT_SET_ERROR,
+                    Command.SET_GROUP
+            );
         }
 
-        return SUCCESSFUL_RESULT_MESSAGE + group.getNumber();
+        return MessageFactory.createMessage(message.getLanguage(), MessageKey.GET_GROUP_RESPONSE, group.getNumber());
     }
 }

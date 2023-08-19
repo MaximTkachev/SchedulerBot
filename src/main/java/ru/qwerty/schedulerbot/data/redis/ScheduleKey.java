@@ -1,15 +1,13 @@
 package ru.qwerty.schedulerbot.data.redis;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Value;
 
-@Getter
-@AllArgsConstructor
+@Value
 public class ScheduleKey {
 
-    private String groupNumber;
+    String groupNumber;
 
-    private String date;
+    String date;
 
     @Override
     public String toString() {
