@@ -18,8 +18,6 @@ import ru.qwerty.schedulerbot.message.MessageKey;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -42,18 +40,25 @@ public class DefaultGroupService implements GroupService {
         log.info("Get group: number = {}", number);
         Validator.checkGroupNumber(number);
 
-        Optional<GroupEntity> groupEntity = groupRepository.findByNumber(number);
-        if (groupEntity.isPresent()) {
-            return groupEntity.get();
+        GroupEntity groupEntity = groupRepository.findByNumber(number);
+        if (groupEntity != null) {
+            return groupEntity;
+        }
+        return getGroupFromServer(number);
+    }
+
+    private synchronized GroupEntity getGroupFromServer(String number) {
+        GroupEntity groupEntity = groupRepository.findByNumber(number);
+        if (groupEntity != null) {
+            return groupEntity;
         }
 
         List<Group> groups = fetchGroupsFromServer();
         updateGroups(groups);
 
-        for (Group group: groups) {
-            if (Objects.equals(group.getName(), number)) {
-                return groupMapper.map(group);
-            }
+        groupEntity = groupRepository.findByNumber(number);
+        if (groupEntity != null) {
+            return groupEntity;
         }
 
         throw new ObjectNotFoundException(MessageKey.GROUP_NOT_FOUND);
@@ -69,10 +74,11 @@ public class DefaultGroupService implements GroupService {
         }
     }
 
+    @SuppressWarnings("java:S2789")
     private void updateGroups(List<Group> groups) {
         List<Group> groupsForSave = new ArrayList<>();
         for (Group group : groups) {
-            if (groupRepository.findByNumber(group.getName()).isEmpty()) {
+            if (groupRepository.findByNumber(group.getName()) == null) {
                 groupsForSave.add(group);
             }
         }

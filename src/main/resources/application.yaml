@@ -15,9 +15,14 @@ spring:
     username: hitsbot
     password: hitsbot
     driver-class-name: org.postgresql.Driver
+  flyway:
+    url: jdbc:postgresql://db:5432/hitsbot
+    password: hitsbot
+    driver-class-name: org.postgresql.Driver
+    user: hitsbot
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
 
 server:
   port: 8080
