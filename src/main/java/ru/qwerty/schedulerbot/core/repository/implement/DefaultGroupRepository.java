@@ -20,7 +20,7 @@ public class DefaultGroupRepository implements GroupRepository {
 
     private static final String SELECT_BY_NUMBER_QUERY = "SELECT id, number FROM groups WHERE number = ?";
 
-    private static final String BATCH_INSERT = "INSERT INTO groups (id, number) VALUES (?, ?)";
+    private static final String INSERT_QUERY = "INSERT INTO groups (id, number) VALUES (?, ?)";
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -52,7 +52,7 @@ public class DefaultGroupRepository implements GroupRepository {
 
         try {
             jdbcTemplate.batchUpdate(
-                    BATCH_INSERT,
+                    INSERT_QUERY,
                     groups,
                     groups.size(),
                     (PreparedStatement ps, GroupEntity group) -> {

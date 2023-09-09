@@ -20,10 +20,10 @@ public class DefaultUserRepository implements UserRepository {
     private static final String SELECT_BY_ID_QUERY
             = "SELECT id, creation_date, group_number, is_subscribed FROM users WHERE id = ?";
 
-    private static final String INSERT_USER_QUERY
+    private static final String INSERT_QUERY
             = "INSERT INTO users (id, creation_date, is_subscribed, group_number) VALUES (?, ?, ?, ?)";
 
-    private static final String UPDATE_USER_QUERY = "UPDATE users SET group_number = ?, is_subscribed = ? WHERE id = ?";
+    private static final String UPDATE_QUERY = "UPDATE users SET group_number = ?, is_subscribed = ? WHERE id = ?";
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -55,7 +55,7 @@ public class DefaultUserRepository implements UserRepository {
 
         try {
             jdbcTemplate.update(
-                    INSERT_USER_QUERY,
+                    INSERT_QUERY,
                     user.getId(),
                     user.getCreationDate(),
                     user.getIsSubscribed(),
@@ -73,7 +73,7 @@ public class DefaultUserRepository implements UserRepository {
         log.info("Update user in db: id = {}", id);
 
         try {
-            jdbcTemplate.update(UPDATE_USER_QUERY, userChanges.getGroupNumber(), userChanges.getIsSubscribed(), id);
+            jdbcTemplate.update(UPDATE_QUERY, userChanges.getGroupNumber(), userChanges.getIsSubscribed(), id);
             log.info("Update user in db: id = {} status = success", id);
         } catch (Exception e) {
             log.error("Update user in db: id = {} status = failed", id, e);
