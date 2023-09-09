@@ -3,7 +3,6 @@ package ru.qwerty.schedulerbot.core.repository.implement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ru.qwerty.schedulerbot.core.repository.GroupRepository;
@@ -25,6 +24,8 @@ public class DefaultGroupRepository implements GroupRepository {
 
     @Override
     public GroupEntity findByNumber(String number) {
+        log.info("Get group from db: number = {}", number);
+
         try {
             GroupEntity groupEntity = jdbcTemplate.queryForObject(
                     SELECT_BY_NUMBER_QUERY,
@@ -32,20 +33,21 @@ public class DefaultGroupRepository implements GroupRepository {
                     number
             );
 
-            log.info("get group successfully");
+            log.info("Get group from db: number = {} status = success", number);
             return groupEntity;
         } catch (EmptyResultDataAccessException e) {
+            log.warn("Get group from db: number = {} status = failed. Group not found", number);
             return null;
-        } catch (IncorrectResultSizeDataAccessException e) {
-            throw e;
         } catch (Exception e) {
-            log.error("Failed to get group");
+            log.error("Get group from db: number = {} status = failed", number, e);
             throw e;
         }
     }
 
     @Override
     public void saveAll(List<GroupEntity> groups) {
+        log.info("Save groups to db: list size = {}", groups.size());
+
         try {
             jdbcTemplate.batchUpdate(
                     BATCH_INSERT,
@@ -56,9 +58,9 @@ public class DefaultGroupRepository implements GroupRepository {
                         ps.setString(2, group.getNumber());
                     }
             );
-            log.info("Successfully saved/updated {} groups", groups.size());
+            log.info("Save groups to db: list size = {} status = success", groups.size());
         } catch (Exception e) {
-            log.error("Failed to save/update groups", e);
+            log.error("Save groups to db: list size = {} status = failed", groups.size(), e);
             throw e;
         }
     }

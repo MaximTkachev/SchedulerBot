@@ -3,7 +3,6 @@ package ru.qwerty.schedulerbot.handler.implement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import ru.qwerty.schedulerbot.core.service.GroupService;
 import ru.qwerty.schedulerbot.core.service.UserService;
 import ru.qwerty.schedulerbot.data.model.Message;
 import ru.qwerty.schedulerbot.data.model.UserChanges;
@@ -19,16 +18,14 @@ import ru.qwerty.schedulerbot.message.MessageKey;
 @RequiredArgsConstructor
 public class SetGroupHandler implements Handler {
 
-    private final GroupService groupService;
-
     private final UserService userService;
 
     @Override
     public String handle(Message message) {
         UserChanges userChanges = UserChanges.builder()
-                .group(groupService.get(getGroupFromMessage(message.getText())))
+                .groupNumber(getGroupFromMessage(message.getText()))
                 .build();
-        userService.update(message.getId(), userChanges);
+        userService.update(message.getChatId(), userChanges);
 
         return MessageFactory.createMessage(message.getLanguage(), MessageKey.SET_GROUP_RESPONSE);
     }

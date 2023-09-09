@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.qwerty.schedulerbot.core.service.UserService;
-import ru.qwerty.schedulerbot.data.entity.GroupEntity;
 import ru.qwerty.schedulerbot.data.model.Command;
 import ru.qwerty.schedulerbot.data.model.Message;
 import ru.qwerty.schedulerbot.handler.Handler;
@@ -23,8 +22,8 @@ public class GetGroupHandler implements Handler {
 
     @Override
     public String handle(Message message) {
-        GroupEntity group = userService.get(message.getId()).getGroup();
-        if (group == null) {
+        String groupNumber = userService.get(message.getChatId()).getGroupNumber();
+        if (groupNumber == null) {
             return MessageFactory.createMessage(
                     message.getLanguage(),
                     MessageKey.GROUP_NOT_SET_ERROR,
@@ -32,6 +31,6 @@ public class GetGroupHandler implements Handler {
             );
         }
 
-        return MessageFactory.createMessage(message.getLanguage(), MessageKey.GET_GROUP_RESPONSE, group.getNumber());
+        return MessageFactory.createMessage(message.getLanguage(), MessageKey.GET_GROUP_RESPONSE, groupNumber);
     }
 }

@@ -8,7 +8,7 @@ import ru.qwerty.schedulerbot.message.Language;
 @ToString
 public class Message {
 
-    Long id;
+    Long chatId;
 
     String text;
 

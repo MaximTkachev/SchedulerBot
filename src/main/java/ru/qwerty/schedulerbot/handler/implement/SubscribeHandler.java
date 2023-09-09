@@ -23,7 +23,7 @@ public class SubscribeHandler implements Handler {
         UserChanges userChanges = UserChanges.builder()
                 .isSubscribed(true)
                 .build();
-        userService.update(message.getId(), userChanges);
+        userService.update(message.getChatId(), userChanges);
 
         return MessageFactory.createMessage(message.getLanguage(), MessageKey.SUBSCRIBE_RESPONSE);
     }

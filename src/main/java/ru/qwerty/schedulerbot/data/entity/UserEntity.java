@@ -5,14 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import java.util.Date;
 
 /**
@@ -20,22 +14,17 @@ import java.util.Date;
  */
 @Getter
 @Setter
-@Entity
 @Builder
-@Table(name = "users")
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserEntity {
 
-    @Id
     private Long id;
 
-    @Temporal(TemporalType.DATE)
     private Date creationDate;
 
-    @ManyToOne
-    @JoinColumn(name = "group_id", referencedColumnName = "id")
-    private GroupEntity group;
+    private String groupNumber;
 
     private Boolean isSubscribed;
 }

@@ -3,3 +3,6 @@ spring:
     url: jdbc:postgresql://localhost:5432/hitsbot
   flyway:
     url: jdbc:postgresql://localhost:5432/hitsbot
+
+redis:
+  host-name: localhost

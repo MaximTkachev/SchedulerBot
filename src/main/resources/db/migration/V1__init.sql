@@ -4,10 +4,10 @@ create table groups(
 );
 
 create table users (
-    id bigint not null primary key,
+    id bigint primary key,
     creation_date date,
     is_subscribed boolean,
-    group_id varchar(255) constraint user_group references groups
+    group_number varchar(255) constraint user_group references groups (number)
 );
 
 alter table groups owner to hitsbot;

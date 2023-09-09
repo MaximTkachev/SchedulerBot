@@ -74,7 +74,6 @@ public class DefaultGroupService implements GroupService {
         }
     }
 
-    @SuppressWarnings("java:S2789")
     private void updateGroups(List<Group> groups) {
         List<Group> groupsForSave = new ArrayList<>();
         for (Group group : groups) {

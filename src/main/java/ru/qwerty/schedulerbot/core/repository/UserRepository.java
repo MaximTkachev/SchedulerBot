@@ -1,9 +1,13 @@
 package ru.qwerty.schedulerbot.core.repository;
 
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
 import ru.qwerty.schedulerbot.data.entity.UserEntity;
+import ru.qwerty.schedulerbot.data.model.UserChanges;
 
-@Repository
-public interface UserRepository extends CrudRepository<UserEntity, Long> {
+public interface UserRepository {
+
+    UserEntity findById(long id);
+
+    void save(UserEntity user);
+
+    void update(long id, UserChanges userChanges);
 }
