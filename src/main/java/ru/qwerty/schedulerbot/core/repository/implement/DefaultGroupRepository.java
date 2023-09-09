@@ -9,6 +9,8 @@ import ru.qwerty.schedulerbot.core.repository.GroupRepository;
 import ru.qwerty.schedulerbot.data.entity.GroupEntity;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 @Slf4j
@@ -29,7 +31,7 @@ public class DefaultGroupRepository implements GroupRepository {
         try {
             GroupEntity groupEntity = jdbcTemplate.queryForObject(
                     SELECT_BY_NUMBER_QUERY,
-                    (resultSet, rowNum) -> new GroupEntity(resultSet.getString("id"), resultSet.getString("number")),
+                    (resultSet, rowNum) -> createGroupEntity(resultSet),
                     number
             );
 
@@ -63,5 +65,12 @@ public class DefaultGroupRepository implements GroupRepository {
             log.error("Save groups to db: list size = {} status = failed", groups.size(), e);
             throw e;
         }
+    }
+
+    private static GroupEntity createGroupEntity(ResultSet resultSet) throws SQLException {
+        return GroupEntity.builder()
+                .id(resultSet.getString("id"))
+                .number(resultSet.getString("number"))
+                .build();
     }
 }

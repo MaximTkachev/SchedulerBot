@@ -1,22 +1,16 @@
 package ru.qwerty.schedulerbot.data.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Value;
 
 /**
  * The group representation in the database.
  */
-@Getter
-@Setter
+@Value
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class GroupEntity {
 
-    private String id;
+    String id;
 
-    private String number;
+    String number;
 }

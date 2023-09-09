@@ -20,8 +20,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 @EnableConfigurationProperties({
         BotProperties.class,
         DataSourceProperties.class,
-        InTimeProperties.class,
-        RedisProperties.class
+        RedisProperties.class,
+        InTimeProperties.class
 })
 public class AppConfig {
 

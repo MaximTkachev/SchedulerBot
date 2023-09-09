@@ -1,30 +1,24 @@
 package ru.qwerty.schedulerbot.data.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
+import lombok.Value;
 
 import java.util.Date;
 
 /**
  * User representation in the database.
  */
-@Getter
-@Setter
+@Value
 @Builder
 @ToString
-@NoArgsConstructor
-@AllArgsConstructor
 public class UserEntity {
 
-    private Long id;
+    Long id;
 
-    private Date creationDate;
+    Date creationDate;
 
-    private String groupNumber;
+    String groupNumber;
 
-    private Boolean isSubscribed;
+    Boolean isSubscribed;
 }
