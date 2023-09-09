@@ -1,41 +1,24 @@
 package ru.qwerty.schedulerbot.data.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.ToString;
+import lombok.Value;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import java.util.Date;
 
 /**
  * User representation in the database.
  */
-@Getter
-@Setter
-@Entity
+@Value
 @Builder
-@Table(name = "users")
-@NoArgsConstructor
-@AllArgsConstructor
+@ToString
 public class UserEntity {
 
-    @Id
-    private Long id;
+    Long id;
 
-    @Temporal(TemporalType.DATE)
-    private Date creationDate;
+    Date creationDate;
 
-    @ManyToOne
-    @JoinColumn(name = "group_id", referencedColumnName = "id")
-    private GroupEntity group;
+    String groupNumber;
 
-    private Boolean isSubscribed;
+    Boolean isSubscribed;
 }

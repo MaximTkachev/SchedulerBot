@@ -5,6 +5,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import ru.qwerty.schedulerbot.config.property.BotProperties;
+import ru.qwerty.schedulerbot.config.property.DataSourceProperties;
 import ru.qwerty.schedulerbot.config.property.InTimeProperties;
 import ru.qwerty.schedulerbot.config.property.RedisProperties;
 
@@ -16,7 +17,12 @@ import java.util.concurrent.ThreadPoolExecutor;
  * The configuration file contains Spring Beans.
  */
 @Configuration
-@EnableConfigurationProperties({BotProperties.class, RedisProperties.class, InTimeProperties.class})
+@EnableConfigurationProperties({
+        BotProperties.class,
+        DataSourceProperties.class,
+        RedisProperties.class,
+        InTimeProperties.class
+})
 public class AppConfig {
 
     @Bean

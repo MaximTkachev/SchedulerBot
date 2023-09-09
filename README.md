@@ -15,6 +15,7 @@ docker-compose --env-file ./variables.env up
 # Использованные технологии
 * Java 11
 * Spring boot 2.7
+* Spring JDBC
 * Postgres
-* Hibernate ORM
 * Redis
+* Flyway

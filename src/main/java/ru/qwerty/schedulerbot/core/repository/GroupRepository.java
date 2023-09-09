@@ -1,13 +1,12 @@
 package ru.qwerty.schedulerbot.core.repository;
 
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
 import ru.qwerty.schedulerbot.data.entity.GroupEntity;
 
-import java.util.Optional;
+import java.util.List;
 
-@Repository
-public interface GroupRepository extends CrudRepository<GroupEntity, String> {
+public interface GroupRepository {
 
-    Optional<GroupEntity> findByNumber(String number);
+    GroupEntity findByNumber(String number);
+
+    void saveAll(List<GroupEntity> groups);
 }

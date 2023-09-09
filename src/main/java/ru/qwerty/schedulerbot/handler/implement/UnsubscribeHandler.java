@@ -23,7 +23,7 @@ public class UnsubscribeHandler implements Handler {
         UserChanges userChanges = UserChanges.builder()
                 .isSubscribed(false)
                 .build();
-        userService.update(message.getId(), userChanges);
+        userService.update(message.getChatId(), userChanges);
 
         return MessageFactory.createMessage(message.getLanguage(), MessageKey.UNSUBSCRIBE_RESPONSE);
     }

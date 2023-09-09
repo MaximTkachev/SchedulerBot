@@ -1,11 +1,11 @@
-package ru.qwerty.schedulerbot.core.api.implement;
+package ru.qwerty.schedulerbot.client.implement;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import ru.qwerty.schedulerbot.config.property.InTimeProperties;
-import ru.qwerty.schedulerbot.core.api.TsuInTimeClient;
+import ru.qwerty.schedulerbot.client.TsuInTimeClient;
 import ru.qwerty.schedulerbot.core.util.SerializationUtils;
 import ru.qwerty.schedulerbot.data.model.dto.Schedule;
 import ru.qwerty.schedulerbot.data.model.dto.Group;

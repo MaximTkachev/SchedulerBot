@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.qwerty.schedulerbot.core.api.TsuInTimeClient;
+import ru.qwerty.schedulerbot.client.TsuInTimeClient;
 import ru.qwerty.schedulerbot.core.repository.GroupRepository;
 import ru.qwerty.schedulerbot.core.service.GroupService;
 import ru.qwerty.schedulerbot.core.util.Validator;
@@ -18,8 +18,6 @@ import ru.qwerty.schedulerbot.message.MessageKey;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -42,18 +40,25 @@ public class DefaultGroupService implements GroupService {
         log.info("Get group: number = {}", number);
         Validator.checkGroupNumber(number);
 
-        Optional<GroupEntity> groupEntity = groupRepository.findByNumber(number);
-        if (groupEntity.isPresent()) {
-            return groupEntity.get();
+        GroupEntity groupEntity = groupRepository.findByNumber(number);
+        if (groupEntity != null) {
+            return groupEntity;
+        }
+        return getGroupFromServer(number);
+    }
+
+    private synchronized GroupEntity getGroupFromServer(String number) {
+        GroupEntity groupEntity = groupRepository.findByNumber(number);
+        if (groupEntity != null) {
+            return groupEntity;
         }
 
         List<Group> groups = fetchGroupsFromServer();
         updateGroups(groups);
 
-        for (Group group: groups) {
-            if (Objects.equals(group.getName(), number)) {
-                return groupMapper.map(group);
-            }
+        groupEntity = groupRepository.findByNumber(number);
+        if (groupEntity != null) {
+            return groupEntity;
         }
 
         throw new ObjectNotFoundException(MessageKey.GROUP_NOT_FOUND);
@@ -72,7 +77,7 @@ public class DefaultGroupService implements GroupService {
     private void updateGroups(List<Group> groups) {
         List<Group> groupsForSave = new ArrayList<>();
         for (Group group : groups) {
-            if (groupRepository.findByNumber(group.getName()).isEmpty()) {
+            if (groupRepository.findByNumber(group.getName()) == null) {
                 groupsForSave.add(group);
             }
         }

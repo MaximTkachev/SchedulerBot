@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.qwerty.schedulerbot.core.repository.UserRepository;
+import ru.qwerty.schedulerbot.core.service.GroupService;
 import ru.qwerty.schedulerbot.core.service.UserService;
 import ru.qwerty.schedulerbot.data.entity.UserEntity;
 import ru.qwerty.schedulerbot.data.model.UserChanges;
@@ -22,37 +23,50 @@ public class DefaultUserService implements UserService {
 
     private final UserRepository userRepository;
 
+    private final GroupService groupService;
+
     @Override
     @Transactional(readOnly = true)
     public UserEntity get(long id) {
         log.info("Get user: id = {}", id);
-        return userRepository.findById(id).orElseThrow(
-                () -> new ObjectNotFoundException(MessageKey.USER_NOT_FOUND)
-        );
+
+        UserEntity user = userRepository.findById(id);
+        if (user == null) {
+            throw new ObjectNotFoundException(MessageKey.USER_NOT_FOUND);
+        }
+
+        return user;
     }
 
     @Override
     @Transactional
-    public void save(UserEntity user) {
-        log.info("Save user: id = {}", user.getId());
-        if (userRepository.findById(user.getId()).isPresent()) {
+    public void save(UserEntity userEntity) {
+        log.info("Save user = {}", userEntity);
+
+        UserEntity user = userRepository.findById(userEntity.getId());
+        if (user != null) {
             throw new DuplicateDataException(MessageKey.USER_WAS_ALREADY_REGISTERED);
         }
 
-        userRepository.save(user);
+        userRepository.save(userEntity);
     }
 
     @Override
     @Transactional
     public void update(long id, UserChanges userChanges) {
         log.info("Update user: id = {}, changes = {}", id, userChanges);
-        UserEntity user = get(id);
 
-        if (userChanges.getGroup() != null) {
-            user.setGroup(userChanges.getGroup());
+        UserEntity user = get(id);
+        if (userChanges.getGroupNumber() == null) {
+            userChanges.setGroupNumber(user.getGroupNumber());
+        } else {
+            groupService.get(userChanges.getGroupNumber());
         }
-        if (userChanges.getIsSubscribed() != null) {
-            user.setIsSubscribed(userChanges.getIsSubscribed());
+
+        if (userChanges.getIsSubscribed() == null) {
+            userChanges.setIsSubscribed(user.getIsSubscribed());
         }
+
+        userRepository.update(id, userChanges);
     }
 }

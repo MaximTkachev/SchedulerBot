@@ -21,7 +21,7 @@ public class DefaultUserMapper implements UserMapper {
     @Override
     public UserEntity map(Message message) {
         return UserEntity.builder()
-                .id(message.getId())
+                .id(message.getChatId())
                 .creationDate(new Date(clock.millis()))
                 .isSubscribed(false)
                 .build();

@@ -10,7 +10,7 @@ public interface UserService {
 
     UserEntity get(long id);
 
-    void save(UserEntity user);
+    void save(UserEntity userEntity);
 
     void update(long id, UserChanges userChanges);
 }
