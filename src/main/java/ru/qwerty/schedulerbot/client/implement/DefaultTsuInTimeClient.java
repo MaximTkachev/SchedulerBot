@@ -46,7 +46,7 @@ public class DefaultTsuInTimeClient implements TsuInTimeClient {
 
     public DefaultTsuInTimeClient(Clock clock, InTimeProperties properties, MeterRegistry meterRegistry) {
         this.clock = clock;
-        this.getMenuCounter = meterRegistry.counter(PrometheusCounterNames.GET_MENU_REQUEST_COUNTER);
+        this.getMenuCounter = meterRegistry.counter(PrometheusCounterNames.GET_GROUPS_REQUEST_COUNTER);
         this.getScheduleCounter = meterRegistry.counter(PrometheusCounterNames.GET_SCHEDULE_REQUEST_COUNTER);
         this.lastRequestForGroupsMillis = new AtomicLong();
         this.getGroupsUrl = properties.getHost() + "/api/web/v1/faculties/aa30cf34-6279-11e9-8107-005056bc52bb/groups";
