@@ -1,12 +1,14 @@
 package ru.qwerty.schedulerbot.handler.implement;
 
-import lombok.RequiredArgsConstructor;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.qwerty.schedulerbot.core.service.UserService;
 import ru.qwerty.schedulerbot.data.converter.UserMapper;
 import ru.qwerty.schedulerbot.data.model.Command;
 import ru.qwerty.schedulerbot.data.model.Message;
+import ru.qwerty.schedulerbot.data.prometheus.PrometheusCounterNames;
 import ru.qwerty.schedulerbot.handler.Handler;
 import ru.qwerty.schedulerbot.message.MessageFactory;
 import ru.qwerty.schedulerbot.message.MessageKey;
@@ -16,16 +18,24 @@ import ru.qwerty.schedulerbot.message.MessageKey;
  */
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class StartHandler implements Handler {
 
     private final UserMapper userMapper;
 
     private final UserService userService;
 
+    private final Counter counter;
+
+    public StartHandler(UserMapper userMapper, UserService userService, MeterRegistry meterRegistry) {
+        this.userMapper = userMapper;
+        this.userService = userService;
+        this.counter = meterRegistry.counter(PrometheusCounterNames.USER_COUNTER);
+    }
+
     @Override
     public String handle(Message message) {
         userService.save(userMapper.map(message));
+        counter.increment();
         return MessageFactory.createMessage(message.getLanguage(), MessageKey.START_RESPONSE, Command.GET_MENU);
     }
 }
