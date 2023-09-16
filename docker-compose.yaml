@@ -25,10 +25,17 @@ services:
       - POSTGRES_PASSWORD=hitsbot
       - POSTGRES_DB=hitsbot
 
+  redis:
+    image: redis
+    container_name: redis
+    ports:
+      - "6379:6379"
+
   grafana:
     build: './config/grafana'
     ports:
       - "3000:3000"
+    container_name: grafana
     volumes:
       - ./grafana:/var/lib/grafana
     environment:
@@ -43,6 +50,7 @@ services:
     image: prom/prometheus
     ports:
       - "9090:9090"
+    container_name: prometheus
     volumes:
       - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
       - ./prometheus:/prometheus
@@ -50,12 +58,6 @@ services:
       monitoring:
         aliases:
           - prometheus
-
-  redis:
-    image: redis
-    container_name: redis
-    ports:
-      - "6379:6379"
 
 networks:
   monitoring:
