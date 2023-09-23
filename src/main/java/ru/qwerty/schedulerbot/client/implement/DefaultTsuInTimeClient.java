@@ -2,6 +2,7 @@ package ru.qwerty.schedulerbot.client.implement;
 
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
+import io.prometheus.client.Histogram;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
@@ -36,6 +37,8 @@ public class DefaultTsuInTimeClient implements TsuInTimeClient {
 
     private final Counter getScheduleCounter;
 
+    private final Histogram getGroupHistogram;
+
     private final AtomicLong lastRequestForGroupsMillis;
 
     private final String getGroupsUrl;
@@ -48,6 +51,7 @@ public class DefaultTsuInTimeClient implements TsuInTimeClient {
         this.clock = clock;
         this.getMenuCounter = meterRegistry.counter(PrometheusCounterNames.GET_GROUPS_REQUEST_COUNTER);
         this.getScheduleCounter = meterRegistry.counter(PrometheusCounterNames.GET_SCHEDULE_REQUEST_COUNTER);
+        this.getGroupHistogram = Histogram.build().name("get_group_histogram").help("some help string").register();
         this.lastRequestForGroupsMillis = new AtomicLong();
         this.getGroupsUrl = properties.getHost() + "/api/web/v1/faculties/aa30cf34-6279-11e9-8107-005056bc52bb/groups";
         this.getScheduleUrlTemplate = properties.getHost() + "/api/web/v1/schedule/group?id=%s&dateFrom=%s&dateTo=%s";
@@ -63,7 +67,13 @@ public class DefaultTsuInTimeClient implements TsuInTimeClient {
         getMenuCounter.increment();
         lastRequestForGroupsMillis.set(clock.millis());
 
-        return sendGetRequest(getGroupsUrl, GROUP_LIST_TYPE_REFERENCE);
+        Histogram.Timer requestTimer = getGroupHistogram.startTimer();
+        try {
+            return sendGetRequest(getGroupsUrl, GROUP_LIST_TYPE_REFERENCE);
+        } finally {
+            requestTimer.observeDuration();
+            requestTimer.close();
+        }
     }
 
     @Override
