@@ -13,6 +13,8 @@ import ru.qwerty.schedulerbot.exception.DuplicateDataException;
 import ru.qwerty.schedulerbot.exception.ObjectNotFoundException;
 import ru.qwerty.schedulerbot.message.MessageKey;
 
+import java.util.List;
+
 /**
  * The default implementation of the {@link UserService} interface.
  */
@@ -36,6 +38,17 @@ public class DefaultUserService implements UserService {
         }
 
         return user;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<UserEntity> getSubscribed(int offset, int batchSize) {
+        log.info("Get subscribed users offset = {} batchSize = {}", offset, batchSize);
+        if (offset < 0 || batchSize <= 0) {
+            return List.of();
+        }
+
+        return userRepository.findSubscribed(offset, batchSize);
     }
 
     @Override

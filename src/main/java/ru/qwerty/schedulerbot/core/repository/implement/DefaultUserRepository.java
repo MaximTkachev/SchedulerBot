@@ -11,6 +11,7 @@ import ru.qwerty.schedulerbot.data.model.UserChanges;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 @Slf4j
 @Repository
@@ -19,6 +20,9 @@ public class DefaultUserRepository implements UserRepository {
 
     private static final String SELECT_BY_ID_QUERY
             = "SELECT id, creation_date, group_number, is_subscribed FROM users WHERE id = ?";
+
+    private static final String SELECT_SUBSCRIBED_QUERY
+            = "SELECT id, creation_date, group_number, is_subscribed FROM users";
 
     private static final String INSERT_QUERY
             = "INSERT INTO users (id, creation_date, is_subscribed, group_number) VALUES (?, ?, ?, ?)";
@@ -45,6 +49,23 @@ public class DefaultUserRepository implements UserRepository {
             return null;
         } catch (Exception e) {
             log.error("Get user from db: id = {} status = failed", id, e);
+            throw e;
+        }
+    }
+
+    @Override
+    public List<UserEntity> findSubscribed(int offset, int batchSize) {
+        log.info("Get subscribed users from db: offset = {}, batchSize = {}", offset, batchSize);
+
+        try {
+            List<UserEntity> userEntities = jdbcTemplate.query(
+                    SELECT_SUBSCRIBED_QUERY,
+                    (resultSet, rowNum) -> createUserEntity(resultSet)
+            );
+            log.info("Get subscribed users from db status = success: list size = {}", userEntities.size());
+            return userEntities;
+        } catch (Exception e) {
+            log.error("Get subscribed users from db status = failed", e);
             throw e;
         }
     }

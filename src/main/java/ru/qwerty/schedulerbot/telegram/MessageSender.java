@@ -9,7 +9,7 @@ import ru.qwerty.schedulerbot.config.property.BotProperties;
 
 @Slf4j
 @Component
-class MessageSender extends DefaultAbsSender {
+public class MessageSender extends DefaultAbsSender {
 
     private final String botToken;
 
