@@ -11,7 +11,7 @@ import ru.qwerty.schedulerbot.data.entity.UserEntity;
 import ru.qwerty.schedulerbot.data.model.UserChanges;
 import ru.qwerty.schedulerbot.exception.DuplicateDataException;
 import ru.qwerty.schedulerbot.exception.ObjectNotFoundException;
-import ru.qwerty.schedulerbot.message.MessageKey;
+import ru.qwerty.schedulerbot.i18n.MessageKey;
 
 import java.util.List;
 

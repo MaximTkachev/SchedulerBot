@@ -4,11 +4,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.qwerty.schedulerbot.core.service.UserService;
+import ru.qwerty.schedulerbot.data.model.Command;
 import ru.qwerty.schedulerbot.data.model.Message;
 import ru.qwerty.schedulerbot.data.model.UserChanges;
 import ru.qwerty.schedulerbot.handler.Handler;
-import ru.qwerty.schedulerbot.message.MessageFactory;
-import ru.qwerty.schedulerbot.message.MessageKey;
+import ru.qwerty.schedulerbot.i18n.MessageFactory;
+import ru.qwerty.schedulerbot.i18n.MessageKey;
 
 /**
  * The handler is used for the case when a user wants to set his default group.
@@ -19,6 +20,11 @@ import ru.qwerty.schedulerbot.message.MessageKey;
 public class SetGroupHandler implements Handler {
 
     private final UserService userService;
+
+    @Override
+    public Command getCommand() {
+        return Command.SET_GROUP;
+    }
 
     @Override
     public String handle(Message message) {

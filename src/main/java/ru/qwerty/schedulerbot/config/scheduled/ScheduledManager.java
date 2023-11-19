@@ -1,4 +1,4 @@
-package ru.qwerty.schedulerbot.scheduled;
+package ru.qwerty.schedulerbot.config.scheduled;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -8,8 +8,8 @@ import ru.qwerty.schedulerbot.core.service.ScheduleService;
 import ru.qwerty.schedulerbot.core.service.UserService;
 import ru.qwerty.schedulerbot.data.entity.UserEntity;
 import ru.qwerty.schedulerbot.data.model.dto.Schedule;
-import ru.qwerty.schedulerbot.message.Language;
-import ru.qwerty.schedulerbot.message.MessageFactory;
+import ru.qwerty.schedulerbot.i18n.Language;
+import ru.qwerty.schedulerbot.i18n.MessageFactory;
 import ru.qwerty.schedulerbot.telegram.MessageSender;
 
 import java.util.Date;
@@ -17,7 +17,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class SchedulingService {
+public class ScheduledManager {
 
     private static final int BATCH_SIZE = 10;
 

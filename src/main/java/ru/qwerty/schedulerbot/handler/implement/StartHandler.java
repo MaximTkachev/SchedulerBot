@@ -10,8 +10,8 @@ import ru.qwerty.schedulerbot.data.model.Command;
 import ru.qwerty.schedulerbot.data.model.Message;
 import ru.qwerty.schedulerbot.data.prometheus.PrometheusCounterNames;
 import ru.qwerty.schedulerbot.handler.Handler;
-import ru.qwerty.schedulerbot.message.MessageFactory;
-import ru.qwerty.schedulerbot.message.MessageKey;
+import ru.qwerty.schedulerbot.i18n.MessageFactory;
+import ru.qwerty.schedulerbot.i18n.MessageKey;
 
 /**
  * The handler is used to register user when they send the first message.
@@ -30,6 +30,11 @@ public class StartHandler implements Handler {
         this.userMapper = userMapper;
         this.userService = userService;
         this.counter = meterRegistry.counter(PrometheusCounterNames.USER_COUNTER);
+    }
+
+    @Override
+    public Command getCommand() {
+        return Command.START;
     }
 
     @Override

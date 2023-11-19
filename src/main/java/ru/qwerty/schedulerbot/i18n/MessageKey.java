@@ -1,4 +1,4 @@
-package ru.qwerty.schedulerbot.message;
+package ru.qwerty.schedulerbot.i18n;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

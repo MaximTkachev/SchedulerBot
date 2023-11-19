@@ -1,6 +1,6 @@
 package ru.qwerty.schedulerbot.exception;
 
-import ru.qwerty.schedulerbot.message.MessageKey;
+import ru.qwerty.schedulerbot.i18n.MessageKey;
 
 /**
  * The exception is thrown when a repository tries to save data to the DB that is already contained there.

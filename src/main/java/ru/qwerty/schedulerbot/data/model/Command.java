@@ -13,7 +13,8 @@ public enum Command {
     SET_GROUP("/sg"),
     START("/start"),
     SUBSCRIBE("/sub"),
-    UNSUBSCRIBE("/unsub");
+    UNSUBSCRIBE("/unsub"),
+    UNKNOWN(null);
 
     private final String value;
 
