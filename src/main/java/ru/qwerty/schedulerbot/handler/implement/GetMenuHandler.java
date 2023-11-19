@@ -23,6 +23,11 @@ public class GetMenuHandler implements Handler {
     }
 
     @Override
+    public Command getCommand() {
+        return Command.GET_MENU;
+    }
+
+    @Override
     public String handle(Message message) {
         counter.increment();
 

@@ -3,6 +3,7 @@ package ru.qwerty.schedulerbot.handler.implement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.qwerty.schedulerbot.core.service.UserService;
+import ru.qwerty.schedulerbot.data.model.Command;
 import ru.qwerty.schedulerbot.data.model.Message;
 import ru.qwerty.schedulerbot.data.model.UserChanges;
 import ru.qwerty.schedulerbot.handler.Handler;
@@ -17,6 +18,11 @@ import ru.qwerty.schedulerbot.i18n.MessageKey;
 public class UnsubscribeHandler implements Handler {
 
     private final UserService userService;
+
+    @Override
+    public Command getCommand() {
+        return Command.UNSUBSCRIBE;
+    }
 
     @Override
     public String handle(Message message) {

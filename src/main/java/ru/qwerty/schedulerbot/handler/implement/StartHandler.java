@@ -33,6 +33,11 @@ public class StartHandler implements Handler {
     }
 
     @Override
+    public Command getCommand() {
+        return Command.START;
+    }
+
+    @Override
     public String handle(Message message) {
         userService.save(userMapper.map(message));
         counter.increment();

@@ -14,6 +14,11 @@ import ru.qwerty.schedulerbot.i18n.MessageKey;
 public class UnknownCommandHandler implements Handler {
 
     @Override
+    public Command getCommand() {
+        return null;
+    }
+
+    @Override
     public String handle(Message message) {
         return MessageFactory.createMessage(
                 message.getLanguage(),

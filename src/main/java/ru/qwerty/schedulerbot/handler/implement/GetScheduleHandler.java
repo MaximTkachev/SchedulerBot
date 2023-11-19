@@ -32,6 +32,11 @@ public class GetScheduleHandler implements Handler {
     private final Clock clock;
 
     @Override
+    public Command getCommand() {
+        return Command.GET_SCHEDULE;
+    }
+
+    @Override
     public String handle(Message message) {
         String groupNumber = userService.get(message.getChatId()).getGroupNumber();
         if (groupNumber == null) {

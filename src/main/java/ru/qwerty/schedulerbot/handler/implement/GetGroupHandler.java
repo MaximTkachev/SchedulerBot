@@ -21,6 +21,11 @@ public class GetGroupHandler implements Handler {
     private final UserService userService;
 
     @Override
+    public Command getCommand() {
+        return Command.GET_GROUP;
+    }
+
+    @Override
     public String handle(Message message) {
         String groupNumber = userService.get(message.getChatId()).getGroupNumber();
         if (groupNumber == null) {

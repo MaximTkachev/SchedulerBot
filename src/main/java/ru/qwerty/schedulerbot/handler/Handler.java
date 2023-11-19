@@ -1,5 +1,6 @@
 package ru.qwerty.schedulerbot.handler;
 
+import ru.qwerty.schedulerbot.data.model.Command;
 import ru.qwerty.schedulerbot.data.model.Message;
 
 /**
@@ -7,11 +8,7 @@ import ru.qwerty.schedulerbot.data.model.Message;
  */
 public interface Handler {
 
-    /**
-     * Handles a user's command.
-     *
-     * @param message Data received from the user.
-     * @return The text to be sent to the user.
-     */
+    Command getCommand();
+
     String handle(Message message);
 }

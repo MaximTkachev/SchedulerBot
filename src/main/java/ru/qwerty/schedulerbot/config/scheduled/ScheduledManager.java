@@ -1,4 +1,4 @@
-package ru.qwerty.schedulerbot.scheduled;
+package ru.qwerty.schedulerbot.config.scheduled;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -17,7 +17,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class SchedulingService {
+public class ScheduledManager {
 
     private static final int BATCH_SIZE = 10;
 
