@@ -8,8 +8,8 @@ import ru.qwerty.schedulerbot.core.service.ScheduleService;
 import ru.qwerty.schedulerbot.core.service.UserService;
 import ru.qwerty.schedulerbot.data.entity.UserEntity;
 import ru.qwerty.schedulerbot.data.model.dto.Schedule;
-import ru.qwerty.schedulerbot.message.Language;
-import ru.qwerty.schedulerbot.message.MessageFactory;
+import ru.qwerty.schedulerbot.i18n.Language;
+import ru.qwerty.schedulerbot.i18n.MessageFactory;
 import ru.qwerty.schedulerbot.telegram.MessageSender;
 
 import java.util.Date;

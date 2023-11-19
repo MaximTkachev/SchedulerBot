@@ -1,7 +1,7 @@
 package ru.qwerty.schedulerbot.exception;
 
 import lombok.Getter;
-import ru.qwerty.schedulerbot.message.MessageKey;
+import ru.qwerty.schedulerbot.i18n.MessageKey;
 
 /**
  * The exception is the parent class for exceptions whose text can be returned to the user as a response.

@@ -1,4 +1,4 @@
-package ru.qwerty.schedulerbot.message;
+package ru.qwerty.schedulerbot.i18n;
 
 import ru.qwerty.schedulerbot.data.model.dto.Lesson;
 import ru.qwerty.schedulerbot.data.model.dto.Schedule;

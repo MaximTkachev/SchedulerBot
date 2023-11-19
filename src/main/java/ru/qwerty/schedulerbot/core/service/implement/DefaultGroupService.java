@@ -14,7 +14,7 @@ import ru.qwerty.schedulerbot.data.model.dto.Group;
 import ru.qwerty.schedulerbot.exception.TimeoutException;
 import ru.qwerty.schedulerbot.exception.InternalException;
 import ru.qwerty.schedulerbot.exception.ObjectNotFoundException;
-import ru.qwerty.schedulerbot.message.MessageKey;
+import ru.qwerty.schedulerbot.i18n.MessageKey;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,6 +1,6 @@
 package ru.qwerty.schedulerbot.exception;
 
-import ru.qwerty.schedulerbot.message.MessageKey;
+import ru.qwerty.schedulerbot.i18n.MessageKey;
 
 public class UnexpectedServerDataException extends ServiceException {
 

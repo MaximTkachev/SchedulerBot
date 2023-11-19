@@ -7,8 +7,8 @@ import ru.qwerty.schedulerbot.core.service.UserService;
 import ru.qwerty.schedulerbot.data.model.Command;
 import ru.qwerty.schedulerbot.data.model.Message;
 import ru.qwerty.schedulerbot.handler.Handler;
-import ru.qwerty.schedulerbot.message.MessageFactory;
-import ru.qwerty.schedulerbot.message.MessageKey;
+import ru.qwerty.schedulerbot.i18n.MessageFactory;
+import ru.qwerty.schedulerbot.i18n.MessageKey;
 
 /**
  * The handler is used for the case when a user wants to get his default group.

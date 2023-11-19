@@ -1,7 +1,7 @@
 package ru.qwerty.schedulerbot.core.util;
 
 import ru.qwerty.schedulerbot.exception.InvalidArgumentException;
-import ru.qwerty.schedulerbot.message.MessageKey;
+import ru.qwerty.schedulerbot.i18n.MessageKey;
 
 import java.util.Objects;
 

@@ -2,7 +2,7 @@ package ru.qwerty.schedulerbot.data.model;
 
 import lombok.ToString;
 import lombok.Value;
-import ru.qwerty.schedulerbot.message.Language;
+import ru.qwerty.schedulerbot.i18n.Language;
 
 @Value
 @ToString

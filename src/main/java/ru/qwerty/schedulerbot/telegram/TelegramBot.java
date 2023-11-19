@@ -9,9 +9,9 @@ import ru.qwerty.schedulerbot.core.util.SerializationUtils;
 import ru.qwerty.schedulerbot.data.model.Message;
 import ru.qwerty.schedulerbot.exception.ServiceException;
 import ru.qwerty.schedulerbot.handler.HandlerFactory;
-import ru.qwerty.schedulerbot.message.Language;
-import ru.qwerty.schedulerbot.message.MessageFactory;
-import ru.qwerty.schedulerbot.message.MessageKey;
+import ru.qwerty.schedulerbot.i18n.Language;
+import ru.qwerty.schedulerbot.i18n.MessageFactory;
+import ru.qwerty.schedulerbot.i18n.MessageKey;
 
 import java.util.concurrent.ThreadPoolExecutor;
 
