@@ -9,14 +9,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.reactive.function.client.WebClient;
 import ru.qwerty.schedulerbot.client.TsuInTimeClient;
-
 import ru.qwerty.schedulerbot.config.property.InTimeProperties;
-import ru.qwerty.schedulerbot.core.util.SerializationUtils;
 import ru.qwerty.schedulerbot.core.util.WaitUtils;
 import ru.qwerty.schedulerbot.data.model.dto.Group;
 import ru.qwerty.schedulerbot.data.model.dto.Schedule;
 import ru.qwerty.schedulerbot.data.prometheus.PrometheusCounterNames;
-
 import ru.qwerty.schedulerbot.exception.TimeoutException;
 
 import java.text.SimpleDateFormat;
@@ -98,12 +95,12 @@ public class DefaultTsuInTimeClient implements TsuInTimeClient {
         return simpleDateFormat.format(date);
     }
 
-    private static String sendGetRequest(String uri) {
-        CompletableFuture<String> response = WebClient.create()
+    private static <T> T sendGetRequest(String uri, ParameterizedTypeReference<T> typeReference) {
+        CompletableFuture<T> response = WebClient.create()
                 .get()
                 .uri(uri)
                 .retrieve()
-                .bodyToMono(String.class)
+                .bodyToMono(typeReference)
                 .timeout(Duration.ofSeconds(10))
                 .toFuture();
 
