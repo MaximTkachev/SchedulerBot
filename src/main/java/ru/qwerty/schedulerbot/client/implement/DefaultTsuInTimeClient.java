@@ -4,17 +4,20 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
-import ru.qwerty.schedulerbot.config.property.InTimeProperties;
 import ru.qwerty.schedulerbot.client.TsuInTimeClient;
+import ru.qwerty.schedulerbot.config.property.InTimeProperties;
 import ru.qwerty.schedulerbot.core.util.SerializationUtils;
-import ru.qwerty.schedulerbot.data.model.dto.Schedule;
+import ru.qwerty.schedulerbot.core.util.WaitUtils;
 import ru.qwerty.schedulerbot.data.model.dto.Group;
+import ru.qwerty.schedulerbot.data.model.dto.Schedule;
 import ru.qwerty.schedulerbot.exception.TimeoutException;
 
 import java.text.SimpleDateFormat;
 import java.time.Clock;
+import java.time.Duration;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Slf4j
@@ -67,12 +70,14 @@ public class DefaultTsuInTimeClient implements TsuInTimeClient {
     }
 
     private static String sendGetRequest(String uri) {
-        return WebClient.create()
+        CompletableFuture<String> response = WebClient.create()
                 .get()
                 .uri(uri)
                 .retrieve()
                 .bodyToMono(String.class)
-                .log()
-                .block();
+                .timeout(Duration.ofSeconds(10))
+                .toFuture();
+
+        return WaitUtils.get(response);
     }
 }
