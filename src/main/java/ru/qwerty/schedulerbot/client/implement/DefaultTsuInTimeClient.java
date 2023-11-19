@@ -1,15 +1,22 @@
 package ru.qwerty.schedulerbot.client.implement;
 
-import com.fasterxml.jackson.core.type.TypeReference;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.prometheus.client.Histogram;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.reactive.function.client.WebClient;
 import ru.qwerty.schedulerbot.client.TsuInTimeClient;
+
 import ru.qwerty.schedulerbot.config.property.InTimeProperties;
 import ru.qwerty.schedulerbot.core.util.SerializationUtils;
 import ru.qwerty.schedulerbot.core.util.WaitUtils;
 import ru.qwerty.schedulerbot.data.model.dto.Group;
 import ru.qwerty.schedulerbot.data.model.dto.Schedule;
+import ru.qwerty.schedulerbot.data.prometheus.PrometheusCounterNames;
+
 import ru.qwerty.schedulerbot.exception.TimeoutException;
 
 import java.text.SimpleDateFormat;
@@ -24,11 +31,19 @@ import java.util.concurrent.atomic.AtomicLong;
 @Component
 public class DefaultTsuInTimeClient implements TsuInTimeClient {
 
-    private static final TypeReference<List<Group>> GROUP_LIST_TYPE_REFERENCE = new TypeReference<>() {};
+    private static final ParameterizedTypeReference<List<Group>> GROUP_LIST_TYPE_REFERENCE
+            = new ParameterizedTypeReference<>() {};
 
-    private static final TypeReference<List<Schedule>> SCHEDULE_LIST_TYPE_REFERENCE = new TypeReference<>() {};
+    private static final ParameterizedTypeReference<List<Schedule>> SCHEDULE_LIST_TYPE_REFERENCE
+            = new ParameterizedTypeReference<>() {};
 
     private final Clock clock;
+
+    private final Counter getMenuCounter;
+
+    private final Counter getScheduleCounter;
+
+    private final Histogram getGroupHistogram;
 
     private final AtomicLong lastRequestForGroupsMillis;
 
@@ -38,8 +53,11 @@ public class DefaultTsuInTimeClient implements TsuInTimeClient {
 
     private final long requestTimeoutMillis;
 
-    public DefaultTsuInTimeClient(Clock clock, InTimeProperties properties) {
+    public DefaultTsuInTimeClient(Clock clock, InTimeProperties properties, MeterRegistry meterRegistry) {
         this.clock = clock;
+        this.getMenuCounter = meterRegistry.counter(PrometheusCounterNames.GET_GROUPS_REQUEST_COUNTER);
+        this.getScheduleCounter = meterRegistry.counter(PrometheusCounterNames.GET_SCHEDULE_REQUEST_COUNTER);
+        this.getGroupHistogram = Histogram.build().name("get_group_histogram").help("some help string").register();
         this.lastRequestForGroupsMillis = new AtomicLong();
         this.getGroupsUrl = properties.getHost() + "/api/web/v1/faculties/aa30cf34-6279-11e9-8107-005056bc52bb/groups";
         this.getScheduleUrlTemplate = properties.getHost() + "/api/web/v1/schedule/group?id=%s&dateFrom=%s&dateTo=%s";
@@ -52,16 +70,27 @@ public class DefaultTsuInTimeClient implements TsuInTimeClient {
             log.warn("Unable to send request for groups due to timeout");
             throw new TimeoutException();
         }
+        getMenuCounter.increment();
         lastRequestForGroupsMillis.set(clock.millis());
 
-        return SerializationUtils.deserialize(sendGetRequest(getGroupsUrl), GROUP_LIST_TYPE_REFERENCE);
+        Histogram.Timer requestTimer = getGroupHistogram.startTimer();
+        try {
+            return sendGetRequest(getGroupsUrl, GROUP_LIST_TYPE_REFERENCE);
+        } finally {
+            requestTimer.observeDuration();
+            requestTimer.close();
+        }
     }
 
     @Override
     public Schedule getSchedule(String groupId, Date date) {
+        getScheduleCounter.increment();
         String dateString = convertDateToString(date);
-        String response = sendGetRequest(String.format(getScheduleUrlTemplate, groupId, dateString, dateString));
-        return SerializationUtils.deserialize(response, SCHEDULE_LIST_TYPE_REFERENCE).get(0);
+        List<Schedule> scheduleList = sendGetRequest(
+                String.format(getScheduleUrlTemplate, groupId, dateString, dateString),
+                SCHEDULE_LIST_TYPE_REFERENCE
+        );
+        return CollectionUtils.isEmpty(scheduleList) ? null : scheduleList.get(0);
     }
 
     private String convertDateToString(Date date) {
