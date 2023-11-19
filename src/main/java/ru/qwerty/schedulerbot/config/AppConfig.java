@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import ru.qwerty.schedulerbot.config.property.BotProperties;
 import ru.qwerty.schedulerbot.config.property.DataSourceProperties;
 import ru.qwerty.schedulerbot.config.property.InTimeProperties;
@@ -17,6 +18,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  * The configuration file contains Spring Beans.
  */
 @Configuration
+@EnableScheduling
 @EnableConfigurationProperties({
         BotProperties.class,
         DataSourceProperties.class,
