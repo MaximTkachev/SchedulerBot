@@ -1,8 +1,11 @@
 package ru.qwerty.schedulerbot.handler.implement;
 
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.stereotype.Component;
 import ru.qwerty.schedulerbot.data.model.Command;
 import ru.qwerty.schedulerbot.data.model.Message;
+import ru.qwerty.schedulerbot.data.prometheus.PrometheusCounterNames;
 import ru.qwerty.schedulerbot.handler.Handler;
 import ru.qwerty.schedulerbot.message.MessageFactory;
 import ru.qwerty.schedulerbot.message.MessageKey;
@@ -13,8 +16,16 @@ import ru.qwerty.schedulerbot.message.MessageKey;
 @Component
 public class GetMenuHandler implements Handler {
 
+    private final Counter counter;
+
+    public GetMenuHandler(MeterRegistry meterRegistry) {
+        this.counter = meterRegistry.counter(PrometheusCounterNames.GET_MENU_COUNTER);
+    }
+
     @Override
     public String handle(Message message) {
+        counter.increment();
+
         return MessageFactory.createMessage(
                 message.getLanguage(),
                 MessageKey.MENU_RESPONSE,
