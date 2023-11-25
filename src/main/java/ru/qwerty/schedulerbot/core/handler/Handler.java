@@ -1,4 +1,4 @@
-package ru.qwerty.schedulerbot.handler;
+package ru.qwerty.schedulerbot.core.handler;
 
 import ru.qwerty.schedulerbot.data.model.Command;
 import ru.qwerty.schedulerbot.data.model.Message;

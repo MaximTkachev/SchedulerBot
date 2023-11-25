@@ -1,4 +1,4 @@
-package ru.qwerty.schedulerbot.client.implement;
+package ru.qwerty.schedulerbot.core.client.implement;
 
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
@@ -8,8 +8,8 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.reactive.function.client.WebClient;
-import ru.qwerty.schedulerbot.client.TsuInTimeClient;
 import ru.qwerty.schedulerbot.config.property.InTimeProperties;
+import ru.qwerty.schedulerbot.core.client.TsuInTimeClient;
 import ru.qwerty.schedulerbot.core.util.WaitUtils;
 import ru.qwerty.schedulerbot.data.model.dto.Group;
 import ru.qwerty.schedulerbot.data.model.dto.Schedule;

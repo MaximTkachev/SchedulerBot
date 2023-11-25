@@ -1,39 +1,28 @@
-package ru.qwerty.schedulerbot.handler.implement;
+package ru.qwerty.schedulerbot.core.handler.implement;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import ru.qwerty.schedulerbot.core.service.GroupService;
-import ru.qwerty.schedulerbot.core.service.ScheduleService;
+import ru.qwerty.schedulerbot.core.handler.Handler;
 import ru.qwerty.schedulerbot.core.service.UserService;
 import ru.qwerty.schedulerbot.data.model.Command;
 import ru.qwerty.schedulerbot.data.model.Message;
-import ru.qwerty.schedulerbot.handler.Handler;
 import ru.qwerty.schedulerbot.i18n.MessageFactory;
 import ru.qwerty.schedulerbot.i18n.MessageKey;
 
-import java.time.Clock;
-import java.util.Date;
-
 /**
- * The handler is used for the case when a user wants to get a schedule for the current day.
+ * The handler is used for the case when a user wants to get his default group.
  */
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class GetScheduleHandler implements Handler {
+public class GetGroupHandler implements Handler {
 
     private final UserService userService;
 
-    private final GroupService groupService;
-
-    private final ScheduleService scheduleService;
-
-    private final Clock clock;
-
     @Override
     public Command getCommand() {
-        return Command.GET_SCHEDULE;
+        return Command.GET_GROUP;
     }
 
     @Override
@@ -47,11 +36,6 @@ public class GetScheduleHandler implements Handler {
             );
         }
 
-        String groupId = groupService.get(groupNumber).getId();
-
-        return MessageFactory.createSchedule(
-                message.getLanguage(),
-                scheduleService.get(groupId, new Date(clock.millis()))
-        );
+        return MessageFactory.createMessage(message.getLanguage(), MessageKey.GET_GROUP_RESPONSE, groupNumber);
     }
 }
