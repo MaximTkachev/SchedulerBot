@@ -1,4 +1,4 @@
-package ru.qwerty.schedulerbot.handler;
+package ru.qwerty.schedulerbot.core.handler;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;

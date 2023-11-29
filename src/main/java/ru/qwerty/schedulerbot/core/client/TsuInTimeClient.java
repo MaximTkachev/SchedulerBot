@@ -1,4 +1,4 @@
-package ru.qwerty.schedulerbot.client;
+package ru.qwerty.schedulerbot.core.client;
 
 import ru.qwerty.schedulerbot.data.model.dto.Group;
 import ru.qwerty.schedulerbot.data.model.dto.Schedule;

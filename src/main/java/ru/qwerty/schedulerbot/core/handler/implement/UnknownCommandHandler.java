@@ -1,9 +1,9 @@
-package ru.qwerty.schedulerbot.handler.implement;
+package ru.qwerty.schedulerbot.core.handler.implement;
 
 import org.springframework.stereotype.Component;
+import ru.qwerty.schedulerbot.core.handler.Handler;
 import ru.qwerty.schedulerbot.data.model.Command;
 import ru.qwerty.schedulerbot.data.model.Message;
-import ru.qwerty.schedulerbot.handler.Handler;
 import ru.qwerty.schedulerbot.i18n.MessageFactory;
 import ru.qwerty.schedulerbot.i18n.MessageKey;
 

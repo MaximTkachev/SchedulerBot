@@ -1,4 +1,4 @@
-package ru.qwerty.schedulerbot.core.util;
+package ru.qwerty.schedulerbot.core.validation;
 
 import ru.qwerty.schedulerbot.exception.InvalidArgumentException;
 import ru.qwerty.schedulerbot.i18n.MessageKey;

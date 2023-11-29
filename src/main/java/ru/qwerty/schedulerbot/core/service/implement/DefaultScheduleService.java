@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
-import ru.qwerty.schedulerbot.client.TsuInTimeClient;
+import ru.qwerty.schedulerbot.core.client.TsuInTimeClient;
 import ru.qwerty.schedulerbot.core.service.ScheduleService;
 import ru.qwerty.schedulerbot.core.util.SerializationUtils;
 import ru.qwerty.schedulerbot.data.model.dto.Schedule;
