@@ -3,6 +3,7 @@ package ru.qwerty.schedulerbot.data.entity;
 import lombok.Builder;
 import lombok.ToString;
 import lombok.Value;
+import ru.qwerty.schedulerbot.i18n.Language;
 
 import java.util.Date;
 
@@ -21,4 +22,6 @@ public class UserEntity {
     String groupNumber;
 
     Boolean isSubscribed;
+
+    Language language;
 }

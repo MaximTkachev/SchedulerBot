@@ -1,9 +1,8 @@
 package ru.qwerty.schedulerbot.core.handler.implement;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import ru.qwerty.schedulerbot.core.handler.Handler;
+import ru.qwerty.schedulerbot.core.handler.AbstractHandler;
 import ru.qwerty.schedulerbot.core.service.UserService;
 import ru.qwerty.schedulerbot.data.model.Command;
 import ru.qwerty.schedulerbot.data.model.Message;
@@ -15,10 +14,11 @@ import ru.qwerty.schedulerbot.i18n.MessageKey;
  */
 @Slf4j
 @Component
-@RequiredArgsConstructor
-public class GetGroupHandler implements Handler {
+public class GetGroupHandler extends AbstractHandler {
 
-    private final UserService userService;
+    public GetGroupHandler(UserService userService) {
+        super(userService);
+    }
 
     @Override
     public Command getCommand() {
@@ -26,7 +26,7 @@ public class GetGroupHandler implements Handler {
     }
 
     @Override
-    public String handle(Message message) {
+    public String doHandle(Message message) {
         String groupNumber = userService.get(message.getChatId()).getGroupNumber();
         if (groupNumber == null) {
             return MessageFactory.createMessage(

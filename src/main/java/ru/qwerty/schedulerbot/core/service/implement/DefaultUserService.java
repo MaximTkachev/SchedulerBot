@@ -80,6 +80,10 @@ public class DefaultUserService implements UserService {
             userChanges.setIsSubscribed(user.getIsSubscribed());
         }
 
+        if (userChanges.getLanguage() == null) {
+            userChanges.setLanguage(user.getLanguage());
+        }
+
         userRepository.update(id, userChanges);
     }
 }
