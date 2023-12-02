@@ -1,8 +1,7 @@
 package ru.qwerty.schedulerbot.core.handler.implement;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.qwerty.schedulerbot.core.handler.Handler;
+import ru.qwerty.schedulerbot.core.handler.AbstractHandler;
 import ru.qwerty.schedulerbot.core.service.UserService;
 import ru.qwerty.schedulerbot.data.model.Command;
 import ru.qwerty.schedulerbot.data.model.Message;
@@ -14,10 +13,11 @@ import ru.qwerty.schedulerbot.i18n.MessageKey;
  * The handler is used for the case when a user wants to subscribe to a daily schedule mailing.
  */
 @Component
-@RequiredArgsConstructor
-public class SubscribeHandler implements Handler {
+public class SubscribeHandler extends AbstractHandler {
 
-    private final UserService userService;
+    public SubscribeHandler(UserService userService) {
+        super(userService);
+    }
 
     @Override
     public Command getCommand() {
@@ -25,7 +25,7 @@ public class SubscribeHandler implements Handler {
     }
 
     @Override
-    public String handle(Message message) {
+    public String doHandle(Message message) {
         UserChanges userChanges = UserChanges.builder()
                 .isSubscribed(true)
                 .build();

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import ru.qwerty.schedulerbot.core.repository.UserRepository;
 import ru.qwerty.schedulerbot.data.entity.UserEntity;
 import ru.qwerty.schedulerbot.data.model.UserChanges;
+import ru.qwerty.schedulerbot.i18n.Language;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,15 +20,15 @@ import java.util.List;
 public class DefaultUserRepository implements UserRepository {
 
     private static final String SELECT_BY_ID_QUERY
-            = "SELECT id, creation_date, group_number, is_subscribed FROM users WHERE id = ?";
+            = "SELECT id, creation_date, group_number, is_subscribed, language FROM users WHERE id = ?";
 
     private static final String SELECT_SUBSCRIBED_QUERY
-            = "SELECT id, creation_date, group_number, is_subscribed FROM users";
+            = "SELECT id, creation_date, group_number, is_subscribed, language FROM users";
 
     private static final String INSERT_QUERY
-            = "INSERT INTO users (id, creation_date, is_subscribed, group_number) VALUES (?, ?, ?, ?)";
+            = "INSERT INTO users (id, creation_date, is_subscribed, group_number, language) VALUES (?, ?, ?, ?, ?)";
 
-    private static final String UPDATE_QUERY = "UPDATE users SET group_number = ?, is_subscribed = ? WHERE id = ?";
+    private static final String UPDATE_QUERY = "UPDATE users SET group_number = ?, is_subscribed = ?, language = ? WHERE id = ?";
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -80,7 +81,8 @@ public class DefaultUserRepository implements UserRepository {
                     user.getId(),
                     user.getCreationDate(),
                     user.getIsSubscribed(),
-                    user.getGroupNumber()
+                    user.getGroupNumber(),
+                    user.getLanguage()
             );
             log.info("Save user to db: id = {} status = success", user.getId());
         } catch (Exception e) {
@@ -94,7 +96,13 @@ public class DefaultUserRepository implements UserRepository {
         log.info("Update user in db: id = {}", id);
 
         try {
-            jdbcTemplate.update(UPDATE_QUERY, userChanges.getGroupNumber(), userChanges.getIsSubscribed(), id);
+            jdbcTemplate.update(
+                    UPDATE_QUERY,
+                    userChanges.getGroupNumber(),
+                    userChanges.getIsSubscribed(),
+                    userChanges.getLanguage().getCode(),
+                    id
+            );
             log.info("Update user in db: id = {} status = success", id);
         } catch (Exception e) {
             log.error("Update user in db: id = {} status = failed", id, e);
@@ -108,6 +116,7 @@ public class DefaultUserRepository implements UserRepository {
                 .creationDate(resultSet.getDate("creation_date"))
                 .groupNumber(resultSet.getString("group_number"))
                 .isSubscribed(resultSet.getBoolean("is_subscribed"))
+                .language(Language.fromString(resultSet.getString("language")))
                 .build();
     }
 }

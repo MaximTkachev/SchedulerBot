@@ -14,7 +14,7 @@ public enum Command {
     START("/start"),
     SUBSCRIBE("/sub"),
     UNSUBSCRIBE("/unsub"),
-    UNKNOWN(null);
+    UNKNOWN("");
 
     private final String value;
 
@@ -34,6 +34,6 @@ public enum Command {
             }
         }
 
-        return null;
+        return UNKNOWN;
     }
 }

@@ -3,7 +3,7 @@ package ru.qwerty.schedulerbot.core.handler.implement;
 import io.micrometer.core.instrument.Counter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import ru.qwerty.schedulerbot.core.handler.Handler;
+import ru.qwerty.schedulerbot.core.handler.AbstractHandler;
 import ru.qwerty.schedulerbot.core.metric.PrometheusMetricService;
 import ru.qwerty.schedulerbot.core.service.UserService;
 import ru.qwerty.schedulerbot.data.converter.UserMapper;
@@ -18,21 +18,15 @@ import ru.qwerty.schedulerbot.i18n.MessageKey;
  */
 @Slf4j
 @Component
-public class StartHandler implements Handler {
+public class StartHandler extends AbstractHandler {
 
     private final UserMapper userMapper;
 
-    private final UserService userService;
-
     private final Counter userCounter;
 
-    public StartHandler(
-            UserMapper userMapper,
-            UserService userService,
-            PrometheusMetricService metricService
-    ) {
+    public StartHandler(UserMapper userMapper, UserService userService, PrometheusMetricService metricService) {
+        super(userService);
         this.userMapper = userMapper;
-        this.userService = userService;
         this.userCounter = metricService.get(PrometheusMetricNames.USER_COUNTER);
     }
 
@@ -42,7 +36,7 @@ public class StartHandler implements Handler {
     }
 
     @Override
-    public String handle(Message message) {
+    public String doHandle(Message message) {
         userService.save(userMapper.map(message));
         userCounter.increment();
         return MessageFactory.createMessage(message.getLanguage(), MessageKey.START_RESPONSE, Command.GET_MENU);
